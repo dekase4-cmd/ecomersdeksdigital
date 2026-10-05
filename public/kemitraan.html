@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kemitraan Deksdigital — Bergabung & Raih Komisi Bersama</title>
+  <meta name="description" content="Bergabung sebagai mitra Deksdigital dan mulai berjualan tanpa modal. Komisi kompetitif, dashboard mudah, proses transaksi cepat dan aman.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Main Store CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar" style="display: none;">
+    <span id="announcement-text">🤝 Program Mitra Deksdigital — Bergabung sekarang dan mulai dapat komisi dari setiap penjualan!</span>
+  </div>
+
+  <!-- Header Navigasi -->
+  <header id="site-header">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <i data-lucide="shopping-bag"></i>
+        <span class="shop-name-text">Deksdigital</span>
+      </a>
+      
+      <!-- Bilah Pencarian -->
+      <div class="search-container" id="search-form" style="display: none;">
+        <input type="text" id="search-input" class="search-input" placeholder="Cari produk kemitraan..." autocomplete="off">
+        <button type="button" id="search-submit" class="search-btn">
+          <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <!-- Navigasi Utama -->
+      <nav class="nav-links">
+        <a href="/" class="nav-link">Beranda</a>
+        <a href="/kemitraan.html" class="nav-link active">Kemitraan</a>
+        <a href="/cart.html" class="nav-link cart-icon-container" title="Keranjang Belanja">
+          <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
+          <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Container Utama -->
+  <main>
+    
+    <!-- Hero Banner Kemitraan Premium -->
+    <section class="mitra-hero">
+      <div class="mitra-hero-content">
+        <div class="hero-eyebrow">
+          <span class="hero-tag">✦ Program Kemitraan</span>
+        </div>
+        <h1 class="hero-title" style="font-size: 3.2rem;">Bergabung &<br>Raih Komisi<br>Bersama Kami</h1>
+        <p class="hero-desc">Jadi mitra Deksdigital dan mulai berjualan tanpa modal. Nikmati komisi kompetitif, sistem dashboard yang mudah, dan proses transaksi otomatis untuk setiap penjualan.</p>
+        
+        <a href="/mitra-dashboard/login.html" class="join-mitra-btn" id="join-mitra-cta">
+          <i data-lucide="user-plus"></i>
+          Daftar Jadi Mitra Sekarang
+          <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Cards Benefit di Hero -->
+      <div class="mitra-hero-visual">
+        <div class="mitra-benefit-card">
+          <div class="mitra-benefit-icon">
+            <i data-lucide="percent"></i>
+          </div>
+          <div class="mitra-benefit-text">
+            <strong>Komisi Fleksibel</strong>
+            <span>Ditanggung penjual</span>
+          </div>
+        </div>
+        <div class="mitra-benefit-card">
+          <div class="mitra-benefit-icon">
+            <i data-lucide="zap"></i>
+          </div>
+          <div class="mitra-benefit-text">
+            <strong>Setup Cepat</strong>
+            <span>Langsung jualan</span>
+          </div>
+        </div>
+        <div class="mitra-benefit-card">
+          <div class="mitra-benefit-icon">
+            <i data-lucide="qr-code"></i>
+          </div>
+          <div class="mitra-benefit-text">
+            <strong>Transaksi Aman</strong>
+            <span>Bayar langsung</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefit Grid Section -->
+    <section style="margin-bottom: 56px; margin-top: 48px;">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Kenapa Bergabung</div>
+          <h2 class="section-title">Keuntungan Jadi Mitra</h2>
+          <p class="section-subtitle">Semua yang Anda butuhkan untuk memulai berjualan online</p>
+        </div>
+      </div>
+      <div class="mitra-benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-card-icon">
+            <i data-lucide="store"></i>
+          </div>
+          <h3>Toko Online Instan</h3>
+          <p>Dapatkan toko online pribadi dengan tampilan profesional langsung setelah mendaftar. Tidak perlu coding sama sekali.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-card-icon">
+            <i data-lucide="trending-up"></i>
+          </div>
+          <h3>Komisi Kompetitif</h3>
+          <p>Komisi sudah termasuk dalam harga jual produk Anda. Tidak ada potongan tambahan — semua harga tetap transparan.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-card-icon">
+            <i data-lucide="layout-dashboard"></i>
+          </div>
+          <h3>Dashboard Lengkap</h3>
+          <p>Pantau penjualan, kelola produk, dan lihat laporan komisi secara real-time dari dashboard mitra yang intuitif.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-card-icon">
+            <i data-lucide="credit-card"></i>
+          </div>
+          <h3>Pembayaran QRIS</h3>
+          <p>Setiap transaksi diproses otomatis via QRIS. Pembeli bayar langsung, konfirmasi mudah, dan aman tanpa risiko.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-card-icon">
+            <i data-lucide="package"></i>
+          </div>
+          <h3>Upload Produk Bebas</h3>
+          <p>Unggah dan kelola produk Anda sendiri tanpa batasan. Atur harga, stok, dan deskripsi sesuai keinginan Anda.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-card-icon">
+            <i data-lucide="headphones"></i>
+          </div>
+          <h3>Support Prioritas</h3>
+          <p>Tim Deksdigital siap membantu Anda 24/7 via WhatsApp. Mitra adalah prioritas kami untuk tumbuh bersama.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Join Mitra Big Button -->
+    <section style="text-align: center; margin-bottom: 64px; padding: 0 20px;">
+      <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 24px; padding: 56px 48px; position: relative; overflow: hidden; box-shadow: 0 24px 48px rgba(249,115,22,0.35);">
+        <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 0); background-size: 24px 24px; opacity: 0.3;"></div>
+        <div style="position: relative; z-index: 1;">
+          <p style="color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;">Mulai Sekarang — Gratis</p>
+          <h2 style="color: #ffffff; font-size: 2.4rem; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; line-height: 1.15;">Siap Jadi Mitra Deksdigital?</h2>
+          <p style="color: rgba(255,255,255,0.8); max-width: 520px; margin: 0 auto 36px; font-size: 1rem; line-height: 1.6;">Daftar gratis sekarang dan mulai berjualan dalam hitungan menit. Tanpa modal, tanpa risiko, langsung menghasilkan.</p>
+          <a href="/mitra-dashboard/login.html" id="join-mitra-big-btn" style="display: inline-flex; align-items: center; gap: 12px; background: #ffffff; color: #ea580c; font-weight: 800; font-size: 1.1rem; padding: 18px 44px; border-radius: 999px; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 12px 32px rgba(0,0,0,0.15); letter-spacing: -0.3px;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 20px 48px rgba(0,0,0,0.25)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 12px 32px rgba(0,0,0,0.15)';">
+            <i data-lucide="user-plus" style="width: 22px; height: 22px;"></i>
+            Daftar Mitra — Mulai Gratis
+            <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+          </a>
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.82rem; margin-top: 18px;">Sudah punya akun? <a href="/mitra-dashboard/login.html" style="color: rgba(255,255,255,0.9); font-weight: 700; text-decoration: underline;">Login di sini</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cara Bergabung Section -->
+    <section style="margin-bottom: 72px; margin-top: 48px; padding: 0 20px;">
+      <div class="section-header" style="text-align: center; justify-content: center; margin-bottom: 48px;">
+        <div style="text-align: center;">
+          <div class="section-label" style="margin: 0 auto;">Alur Program</div>
+          <h2 class="section-title">Cara Bergabung Menjadi Mitra</h2>
+          <p class="section-subtitle">Langkah mudah memulai bisnis online Anda sendiri</p>
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 1100px; margin: 0 auto;">
+        
+        <div style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; padding: 36px 30px; text-align: center; position: relative; box-shadow: var(--shadow-sm); transition: all 0.3s;">
+          <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 44px; height: 44px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(10,25,47,0.2);">1</div>
+          <div style="margin-top: 10px; color: var(--primary-color); margin-bottom: 16px;"><i data-lucide="user-check" style="width: 32px; height: 32px; margin: 0 auto;"></i></div>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 12px;">Mendaftar Akun</h3>
+          <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6;">Lakukan registrasi cepat di halaman registrasi Mitra. Isi detail toko Anda, kontak WhatsApp, dan persentase komisi platform.</p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; padding: 36px 30px; text-align: center; position: relative; box-shadow: var(--shadow-sm); transition: all 0.3s;">
+          <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 44px; height: 44px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(10,25,47,0.2);">2</div>
+          <div style="margin-top: 10px; color: var(--primary-color); margin-bottom: 16px;"><i data-lucide="package-plus" style="width: 32px; height: 32px; margin: 0 auto;"></i></div>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 12px;">Upload Produk Anda</h3>
+          <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6;">Akses Dashboard Mitra dan mulai masukkan produk Anda (produk fisik maupun digital). Atur harga dasar, stok, berat, serta gambar produk.</p>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; padding: 36px 30px; text-align: center; position: relative; box-shadow: var(--shadow-sm); transition: all 0.3s;">
+          <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 44px; height: 44px; background: var(--gradient-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(10,25,47,0.2);">3</div>
+          <div style="margin-top: 10px; color: var(--primary-color); margin-bottom: 16px;"><i data-lucide="coins" style="width: 32px; height: 32px; margin: 0 auto;"></i></div>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 12px;">Dapatkan Penghasilan</h3>
+          <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6;">Produk Anda akan tampil langsung di katalog utama beranda. Saat pembeli membeli via QRIS, dana akan tercatat di dashboard dan siap ditarik.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section style="margin-bottom: 72px; padding: 0 20px;">
+      <div class="section-header" style="text-align: center; justify-content: center; margin-bottom: 40px;">
+        <div style="text-align: center;">
+          <div class="section-label" style="margin: 0 auto;">FAQ</div>
+          <h2 class="section-title">Pertanyaan Umum (FAQ)</h2>
+          <p class="section-subtitle">Pertanyaan yang sering ditanyakan mengenai kemitraan</p>
+        </div>
+      </div>
+      
+      <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: white; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="help-circle" style="color: var(--accent-color); width: 18px; height: 18px; flex-shrink:0;"></i>
+            Apakah ada biaya pendaftaran untuk menjadi mitra?
+          </h4>
+          <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; padding-left: 26px;">Tidak ada. Pendaftaran mitra 100% gratis tanpa biaya tahunan atau tersembunyi.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="help-circle" style="color: var(--accent-color); width: 18px; height: 18px; flex-shrink:0;"></i>
+            Bagaimana sistem pembagian komisi / biaya admin?
+          </h4>
+          <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; padding-left: 26px;">Biaya layanan platform (komisi) ditentukan sendiri oleh pemilik platform, minimal 5%. Persentase ini dipotong dari harga jual produk saat terjadi transaksi sukses.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm);">
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="help-circle" style="color: var(--accent-color); width: 18px; height: 18px; flex-shrink:0;"></i>
+            Apakah mitra harus mengurus pengiriman barang sendiri?
+          </h4>
+          <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; padding-left: 26px;">Ya. Untuk produk fisik, mitra wajib mengirimkan produk dari kota asal mereka menggunakan kurir yang dipilih oleh pembeli. Resi pengiriman kemudian diinput ke dashboard.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo">
+            <i data-lucide="shopping-bag" style="width: 22px; height: 22px;"></i>
+            <span class="shop-name-text">Deksdigital</span>
+          </a>
+          <p>Platform e-commerce resmi Deksdigital dengan sistem kemitraan no-code terintegrasi dan proses pembayaran yang mudah.</p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Navigasi</h4>
+          <ul class="footer-links">
+            <li><a href="/">Beranda</a></li>
+            <li><a href="/kemitraan.html">Kemitraan</a></li>
+            <li><a href="/cart.html">Keranjang</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Pembayaran</h4>
+          <div class="footer-payment">
+            <i data-lucide="credit-card" style="width: 18px; height: 18px; color: var(--accent-color);"></i>
+            Pembayaran Mudah
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Deksdigital Store. All Rights Reserved.</p>
+        <ul class="footer-bottom-links">
+          <li><a href="#">Kebijakan Privasi</a></li>
+          <li><a href="#">Syarat & Ketentuan</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WIDGETS -->
+
+  <!-- WhatsApp CS Widget -->
+  <a id="wa-cs-widget" href="#" target="_blank" class="wa-chat-float" style="display: none;" title="Chat WhatsApp CS">
+    <i data-lucide="message-circle" style="width: 26px; height: 26px;"></i>
+  </a>
+
+  <!-- AI Chatbot Widget -->
+  <div class="ai-chat-widget" id="ai-chat-widget">
+    <button class="ai-chat-toggle" id="ai-chat-toggle" title="Asisten Belanja AI">
+      <i data-lucide="sparkles" style="width: 26px; height: 26px;"></i>
+    </button>
+    <div class="ai-chat-box" id="ai-chat-box">
+      <div class="ai-chat-header">
+        <div class="ai-chat-profile">
+          <div class="ai-chat-avatar">AI</div>
+          <div>
+            <div class="ai-chat-title">Asisten Kemitraan</div>
+            <div class="ai-chat-subtitle">Online — Gemini AI</div>
+          </div>
+        </div>
+        <button class="ai-chat-close" id="ai-chat-close" title="Tutup">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+      <div class="ai-chat-messages" id="ai-messages"></div>
+      <div class="ai-chat-input-area">
+        <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Tanya seputar kemitraan...">
+        <button type="button" id="ai-send-btn" class="ai-chat-send" title="Kirim">
+          <i data-lucide="send" style="width: 15px; height: 15px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Store JavaScript -->
+  <script src="/js/app.js"></script>
+
+  <!-- Logika Khas Halaman Kemitraan -->
+  <script>
+    // Header scroll effect
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // Init icons
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => lucide.createIcons(), 100);
+    });
+  </script>
+</body>
+</html>

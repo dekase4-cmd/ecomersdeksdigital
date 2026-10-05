@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Produk — Deksdigital Store</title>
+  <meta name="description" content="Detail produk Deksdigital Store. Beli aksesoris gaming dan komputer original dengan garansi resmi.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Main Store CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Leaflet Maps CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <!-- Announcement Bar (Toggled via Admin) -->
+  <div class="announcement-bar" style="display: none;">
+    <span id="announcement-text">Mengambil pengumuman terbaru...</span>
+  </div>
+
+  <!-- Header Navigasi -->
+  <header id="site-header">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <i data-lucide="shopping-bag"></i>
+        <span class="shop-name-text">Deksdigital</span>
+      </a>
+      
+      <!-- Navigasi Utama -->
+      <nav class="nav-links">
+        <a href="/" class="nav-link">Beranda</a>
+        <a href="/kemitraan.html" class="nav-link">Kemitraan</a>
+        <a href="/cart.html" class="nav-link cart-icon-container" title="Keranjang Belanja">
+          <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
+          <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Container Utama -->
+  <main>
+    
+    <!-- Detail Produk Card -->
+    <div id="product-detail-loader" style="text-align: center; padding: 60px 0; color: #64748b;">
+      <i data-lucide="loader-2" class="animate-spin" style="margin: 0 auto 10px auto; width: 40px; height: 40px;"></i>
+      <p>Sedang memuat informasi detail produk...</p>
+    </div>
+
+    <div class="product-detail-container" id="product-detail-card" style="display: none;">
+      <!-- Gambar Produk -->
+      <div class="detail-gallery">
+        <div class="detail-img-container">
+          <img id="p-image" src="/uploads/default-product.jpg" alt="Gambar Produk" onerror="this.onerror=null; this.src='/uploads/default-product.jpg'">
+        </div>
+      </div>
+      
+      <!-- Konten Informasi Produk -->
+      <div class="detail-body">
+        <span class="detail-store" id="p-store">Deksdigital Store</span>
+        <h1 class="detail-title" id="p-name">Nama Produk</h1>
+        
+        <div class="detail-meta">
+          <span>Kategori: <strong id="p-category">Umum</strong></span>
+          <span>|</span>
+          <span id="p-stock-text">Stok tersedia: 0</span>
+        </div>
+        
+        <div class="detail-price" id="p-price">Rp 0</div>
+        
+        <div class="detail-desc-title">Deskripsi Produk</div>
+        <p class="detail-desc" id="p-desc">Deskripsi lengkap mengenai keunggulan, spesifikasi detail, dan tata cara penggunaan produk.</p>
+        
+        <!-- Aksi Pembelian -->
+        <div class="detail-actions">
+          <div class="quantity-controller">
+            <button class="qty-btn" onclick="adjustQty(-1)">-</button>
+            <input type="text" id="qty-input" class="qty-input" value="1" readonly>
+            <button class="qty-btn" onclick="adjustQty(1)">+</button>
+          </div>
+          <button class="add-cart-btn" onclick="handleAddToCart()">
+            <i data-lucide="shopping-cart" style="width: 18px; height: 18px;"></i> Tambah Ke Keranjang
+          </button>
+          <button class="buy-now-btn" onclick="handleBuyNow()">Beli Sekarang</button>
+        </div>
+
+        <!-- Widget Kalkulator Ongkir -->
+        <div id="shipping-calculator-widget" style="display: none; margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; box-shadow: var(--shadow-sm);">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--secondary-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="truck" style="color: var(--primary-color); width: 20px; height: 20px;"></i>
+            Kalkulator Ongkos Kirim (Maps)
+          </h3>
+          
+          <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>Asal: <strong id="ship-origin-text">-</strong></div>
+            <div>Berat Paket: <strong id="ship-weight-text">-</strong></div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Pilih Kota Tujuan:</label>
+            <select id="ship-dest-select" style="width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); background: white; font-size: 0.9rem; color: var(--secondary-color); font-weight: 600; outline: none; transition: all 0.3s; box-shadow: var(--shadow-sm);">
+              <option value="">-- Pilih Kota Tujuan --</option>
+            </select>
+          </div>
+
+          <!-- Leaflet Map Container -->
+          <div id="shipping-map" style="height: 200px; border-radius: 16px; margin-bottom: 20px; display: none; overflow: hidden; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);"></div>
+
+          <div id="shipping-loading" style="display: none; text-align: center; padding: 20px 0;">
+            <i data-lucide="loader-2" class="animate-spin" style="margin: 0 auto; width: 24px; height: 24px; color: var(--primary-color); animation: spin 1s linear infinite;"></i>
+          </div>
+
+          <div id="shipping-results" style="display: none;">
+            <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 10px;">Estimasi Jasa Pengiriman:</label>
+            <div id="shipping-courier-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seksi Ulasan Pelanggan (Toggled via Admin) -->
+    <section class="reviews-section" id="reviews-card" style="display: none;">
+      <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+        <i data-lucide="message-square" style="width: 18px; height: 18px; display:inline-block; vertical-align:middle; margin-right:5px;"></i> Ulasan Pembeli
+      </h2>
+      <div id="reviews-list">
+        <!-- Ulasan dummy terisi di sini -->
+        <div class="review-item">
+          <div class="review-meta">
+            <span class="reviewer-name">Ahmad Kurniawan</span>
+            <span class="review-rating">★★★★★</span>
+          </div>
+          <p class="review-text">Barangnya bagus banget! Pengiriman sangat cepat, seller juga responsif. Desainnya premium dan berfungsi dengan baik.</p>
+        </div>
+        <div class="review-item">
+          <div class="review-meta">
+            <span class="reviewer-name">Rian Hidayat</span>
+            <span class="review-rating">★★★★☆</span>
+          </div>
+          <p class="review-text">Kualitas produk memuaskan, bahan kuat. Hanya saja packing kardusnya sedikit penyok tapi barang di dalam aman. Recommended!</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo">
+            <i data-lucide="shopping-bag" style="width: 22px; height: 22px;"></i>
+            <span class="shop-name-text">Deksdigital</span>
+          </a>
+          <p>Platform e-commerce resmi Deksdigital dengan sistem kemitraan no-code terintegrasi.</p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Navigasi</h4>
+          <ul class="footer-links">
+            <li><a href="/">Beranda</a></li>
+            <li><a href="/kemitraan.html">Kemitraan</a></li>
+            <li><a href="/cart.html">Keranjang</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Pembayaran</h4>
+          <div class="footer-payment">
+            <i data-lucide="credit-card" style="width: 18px; height: 18px; color: var(--accent-color);"></i>
+            Pembayaran Mudah
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Deksdigital Store. All Rights Reserved.</p>
+        <ul class="footer-bottom-links">
+          <li><a href="#">Kebijakan Privasi</a></li>
+          <li><a href="#">Syarat & Ketentuan</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WIDGETS -->
+
+  <!-- WhatsApp CS Widget -->
+  <a id="wa-cs-widget" href="#" target="_blank" class="wa-chat-float" style="display: none;" title="Chat WhatsApp CS">
+    <i data-lucide="message-circle" style="width: 26px; height: 26px;"></i>
+  </a>
+
+  <!-- AI Chatbot Widget -->
+  <div class="ai-chat-widget" id="ai-chat-widget">
+    <button class="ai-chat-toggle" id="ai-chat-toggle" title="Asisten Belanja AI">
+      <i data-lucide="sparkles" style="width: 26px; height: 26px;"></i>
+    </button>
+    <div class="ai-chat-box" id="ai-chat-box">
+      <div class="ai-chat-header">
+        <div class="ai-chat-profile">
+          <div class="ai-chat-avatar">AI</div>
+          <div>
+            <div class="ai-chat-title">Asisten Belanja</div>
+            <div class="ai-chat-subtitle">Online — Gemini AI</div>
+          </div>
+        </div>
+        <button class="ai-chat-close" id="ai-chat-close" title="Tutup">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+      <div class="ai-chat-messages" id="ai-messages"></div>
+      <div class="ai-chat-input-area">
+        <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Tanya tentang produk ini...">
+        <button type="button" id="ai-send-btn" class="ai-chat-send" title="Kirim">
+          <i data-lucide="send" style="width: 15px; height: 15px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Store JavaScript -->
+  <script src="/js/app.js"></script>
+
+  <!-- Logika Khas Halaman Detail Produk -->
+  <script>
+    let activeProduct = null;
+    let citiesList = [];
+    let mapInstance = null;
+    let pathLine = null;
+    let markersGroup = null;
+
+    // Koordinat kota-kota untuk visualisasi rute peta Leaflet
+    const cityCoords = {
+      "Jakarta": [-6.2088, 106.8456],
+      "Bandung": [-6.9175, 107.6191],
+      "Bekasi": [-6.2383, 106.9756],
+      "Bogor": [-6.5971, 106.8060],
+      "Depok": [-6.4025, 106.7942],
+      "Semarang": [-6.9667, 110.4167],
+      "Surakarta": [-7.5667, 110.8167],
+      "Surabaya": [-7.2575, 112.7521],
+      "Malang": [-7.9839, 112.6214],
+      "Yogyakarta": [-7.7956, 110.3695],
+      "Tangerang": [-6.1783, 106.6319],
+      "Serang": [-6.1200, 106.1502],
+      "Denpasar": [-8.6500, 115.2167],
+      "Medan": [3.5952, 98.6722],
+      "Padang": [-0.9471, 100.4172],
+      "Pekanbaru": [0.5070, 101.4478],
+      "Batam": [1.1301, 104.0520],
+      "Palembang": [-2.9909, 104.7566],
+      "Bandar Lampung": [-5.4500, 105.2667],
+      "Pontianak": [-0.0263, 109.3425],
+      "Samarinda": [-0.5022, 117.1536],
+      "Balikpapan": [-1.2654, 116.8312],
+      "Makassar": [-5.1476, 119.4327],
+      "Manado": [1.4783, 124.8481],
+      "Ambon": [-3.6554, 128.1906],
+      "Jayapura": [-2.5489, 140.7178]
+    };
+
+    // Ambil Parameter ID Produk dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    async function loadShippingCities() {
+      try {
+        const res = await fetch('/api/shipping/cities');
+        if (!res.ok) return;
+        citiesList = await res.json();
+        
+        const select = document.getElementById('ship-dest-select');
+        select.innerHTML = '<option value="">-- Pilih Kota Tujuan --</option>';
+        citiesList.forEach(city => {
+          const opt = document.createElement('option');
+          opt.value = city.id;
+          opt.textContent = `${city.name} (${city.province})`;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Gagal mengambil daftar kota:', err);
+      }
+    }
+
+    function initMap(originCityName, destCityName, originCoords, destCoords) {
+      const mapContainer = document.getElementById('shipping-map');
+      mapContainer.style.display = 'block';
+
+      try {
+        if (!mapInstance) {
+          mapInstance = L.map('shipping-map', {
+            zoomControl: false,
+            attributionControl: false
+          });
+          
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19
+          }).addTo(mapInstance);
+        }
+
+        // Bersihkan layer lama
+        if (markersGroup) {
+          mapInstance.removeLayer(markersGroup);
+        }
+        if (pathLine) {
+          mapInstance.removeLayer(pathLine);
+        }
+
+        markersGroup = L.featureGroup().addTo(mapInstance);
+
+        // Custom div icon untuk visual premium
+        const markerIcon = L.divIcon({
+          className: 'custom-div-icon',
+          html: `<div style="background-color: #ea580c; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(234,88,12,0.6);"></div>`,
+          iconSize: [14, 14],
+          iconAnchor: [7, 7]
+        });
+
+        const originMarker = L.marker(originCoords, { icon: markerIcon })
+          .bindTooltip(`Asal: ${originCityName}`, { permanent: true, direction: 'top', offset: [0, -5] })
+          .addTo(markersGroup);
+
+        const destMarker = L.marker(destCoords, { icon: markerIcon })
+          .bindTooltip(`Tujuan: ${destCityName}`, { permanent: true, direction: 'bottom', offset: [0, 5] })
+          .addTo(markersGroup);
+
+        pathLine = L.polyline([originCoords, destCoords], {
+          color: '#ea580c',
+          weight: 3,
+          dashArray: '5, 8',
+          lineCap: 'round'
+        }).addTo(mapInstance);
+
+        mapInstance.fitBounds(markersGroup.getBounds(), { padding: [50, 50] });
+        
+        // Memastikan ukuran render Leaflet sinkron
+        setTimeout(() => {
+          mapInstance.invalidateSize();
+        }, 100);
+      } catch (e) {
+        console.error('Error init Leaflet map:', e);
+      }
+    }
+
+    async function loadProductDetail() {
+      if (!productId) {
+        document.getElementById('product-detail-loader').innerHTML = `
+          <p style="color: #ef4444; font-weight: 700;">ID Produk tidak disertakan.</p>
+          <a href="/" style="color: var(--accent-color); font-weight:600; text-decoration: underline;">Kembali ke Beranda</a>
+        `;
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/store/product/${productId}`);
+        if (!res.ok) {
+          throw new Error('Produk tidak ditemukan.');
+        }
+        
+        const prod = await res.json();
+        activeProduct = prod;
+
+        // Isi Elemen Halaman
+        document.getElementById('p-image').src = prod.imageUrl;
+        document.getElementById('p-name').textContent = prod.name;
+        document.getElementById('p-category').textContent = prod.category;
+        document.getElementById('p-price').textContent = formatRupiah(prod.price);
+        document.getElementById('p-desc').textContent = prod.description;
+        
+        // Atur Info Toko Penjual
+        const pStore = document.getElementById('p-store');
+        if (prod.ownerId === 'admin') {
+          pStore.textContent = 'Produk Resmi Deksdigital';
+          pStore.style.color = 'var(--primary-color)';
+        } else {
+          pStore.innerHTML = `<i data-lucide="store" style="width:14px; height:14px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> Mitra: ${prod.shopName}`;
+          pStore.style.color = 'var(--accent-color)';
+        }
+
+        // Tampilkan/Sembunyikan Peringatan Stok Tipis (Toggled via Admin)
+        const isWarning = storeSettings && storeSettings.features.stockAlert && prod.stock <= (storeSettings.stockThreshold || 5);
+        const stockEl = document.getElementById('p-stock-text');
+        
+        if (isWarning) {
+          stockEl.innerHTML = `<span class="stock-warning">Peringatan! Stok menipis (${prod.stock} unit tersisa)</span>`;
+        } else {
+          stockEl.textContent = `Stok tersedia: ${prod.stock} unit`;
+        }
+
+        // Tampilkan Ulasan jika diaktifkan di admin
+        const reviewsCard = document.getElementById('reviews-card');
+        if (storeSettings && storeSettings.features.reviews) {
+          reviewsCard.style.display = 'block';
+        } else {
+          reviewsCard.style.display = 'none';
+        }
+
+        // Setup Kalkulator Ongkir jika jenis pengiriman fisik
+        const calcWidget = document.getElementById('shipping-calculator-widget');
+        if (prod.deliveryType === 'fisik') {
+          calcWidget.style.display = 'block';
+          const originCity = prod.originCity || 'Jakarta';
+          document.getElementById('ship-origin-text').textContent = originCity;
+          document.getElementById('ship-weight-text').textContent = `${prod.weight || 1000} gram (${((prod.weight || 1000) / 1000).toFixed(1)} kg)`;
+          loadShippingCities();
+        } else {
+          calcWidget.style.display = 'none';
+        }
+
+        // Sembunyikan loader dan tampilkan card
+        document.getElementById('product-detail-loader').style.display = 'none';
+        document.getElementById('product-detail-card').style.display = 'flex';
+        
+        lucide.createIcons();
+      } catch (err) {
+        document.getElementById('product-detail-loader').innerHTML = `
+          <p style="color: #ef4444; font-weight: 700;">Gagal memuat produk. Hubungi CS.</p>
+          <a href="/" style="color: var(--accent-color); font-weight:600; text-decoration: underline;">Kembali ke Beranda</a>
+        `;
+      }
+    }
+
+    // Listener Perubahan Dropdown Kota Tujuan
+    document.addEventListener('DOMContentLoaded', () => {
+      const select = document.getElementById('ship-dest-select');
+      if (select) {
+        select.addEventListener('change', async (e) => {
+          const destCityId = e.target.value;
+          if (!destCityId) {
+            document.getElementById('shipping-map').style.display = 'none';
+            document.getElementById('shipping-results').style.display = 'none';
+            return;
+          }
+
+          const loading = document.getElementById('shipping-loading');
+          const results = document.getElementById('shipping-results');
+          const list = document.getElementById('shipping-courier-list');
+
+          loading.style.display = 'block';
+          results.style.display = 'none';
+
+          try {
+            const originCity = activeProduct.originCity || 'Jakarta';
+            const weight = activeProduct.weight || 1000;
+            
+            const res = await fetch('/api/shipping/estimate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ originCity, destCityId, weight })
+            });
+
+            if (!res.ok) throw new Error();
+
+            const data = await res.json();
+            loading.style.display = 'none';
+            results.style.display = 'block';
+
+            list.innerHTML = '';
+            data.results.forEach(courier => {
+              const row = document.createElement('div');
+              row.style.background = 'white';
+              row.style.border = '1px solid var(--border-color)';
+              row.style.borderRadius = '12px';
+              row.style.padding = '12px 16px';
+              row.style.boxShadow = '0 2px 6px rgba(0,0,0,0.02)';
+              row.style.marginBottom = '8px';
+
+              // Layanan HTML
+              let servicesHTML = '';
+              courier.services.forEach(srv => {
+                servicesHTML += `
+                  <div style="margin-top: 6px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+                    <span style="font-size: 0.85rem; color: #475569;">${srv.service} (${srv.etd}):</span>
+                    <strong style="font-size: 0.9rem; color: var(--primary-color);">${formatRupiah(srv.cost)}</strong>
+                  </div>
+                `;
+              });
+
+              row.innerHTML = `
+                <div style="font-weight: 800; font-size: 0.9rem; color: var(--secondary-color); display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="package" style="width: 14px; height: 14px; color: #ea580c;"></i>
+                  ${courier.name}
+                </div>
+                <div style="margin-top: 2px;">
+                  ${servicesHTML}
+                </div>
+              `;
+              list.appendChild(row);
+            });
+            lucide.createIcons();
+
+            // Dapatkan Koordinat Origin & Dest untuk Peta Leaflet
+            const originCoords = cityCoords[data.origin] || [-6.2088, 106.8456];
+            const destCityObj = citiesList.find(c => c.id === destCityId);
+            const destCoords = destCityObj ? (cityCoords[destCityObj.name] || [-6.2088, 106.8456]) : [-6.2088, 106.8456];
+            
+            initMap(data.origin, destCityObj ? destCityObj.name : 'Tujuan', originCoords, destCoords);
+
+          } catch (err) {
+            loading.style.display = 'none';
+            showToast('Gagal memuat estimasi ongkir.');
+          }
+        });
+      }
+    });
+
+    // Mengubah Jumlah/Qty
+    function adjustQty(amount) {
+      const qtyInput = document.getElementById('qty-input');
+      let currentVal = parseInt(qtyInput.value) || 1;
+      
+      currentVal += amount;
+      
+      if (currentVal < 1) currentVal = 1;
+      if (activeProduct && currentVal > activeProduct.stock) {
+        currentVal = activeProduct.stock;
+        showToast('Jumlah melebihi stok yang tersedia!');
+      }
+      
+      qtyInput.value = currentVal;
+    }
+
+    // Tambah ke Keranjang
+    function handleAddToCart() {
+      if (!activeProduct) return;
+      
+      const qtyInput = document.getElementById('qty-input');
+      const qty = parseInt(qtyInput.value) || 1;
+      
+      if (activeProduct.stock <= 0) {
+        showToast('Maaf, stok produk habis!');
+        return;
+      }
+      
+      addToCart(activeProduct.id, qty);
+    }
+
+    // Beli Sekarang (Langsung Tambah ke Keranjang dan Redirect ke Cart)
+    function handleBuyNow() {
+      if (!activeProduct) return;
+      
+      const qtyInput = document.getElementById('qty-input');
+      const qty = parseInt(qtyInput.value) || 1;
+      
+      if (activeProduct.stock <= 0) {
+        showToast('Maaf, stok produk habis!');
+        return;
+      }
+      
+      addToCart(activeProduct.id, qty);
+      window.location.href = '/cart.html';
+    }
+  </script>
+</body>
+</html>

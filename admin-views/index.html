@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Deksdigital E-Commerce</title>
+  <!-- Admin CSS -->
+  <link rel="stylesheet" href="/admin-dashboard/css/admin.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Real-Time Toast Popup */
+    .admin-notif-popup {
+      position: fixed; bottom: 24px; right: 24px;
+      background: white; border-radius: 16px; padding: 18px 24px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.18); display: flex; align-items: center; gap: 14px;
+      z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      border-left: 5px solid #f97316; max-width: 380px;
+    }
+    .admin-notif-popup.visible { transform: translateY(0); opacity: 1; }
+    .admin-notif-popup.chat { border-left-color: #25D366; }
+    .admin-notif-popup.payment { border-left-color: #3b82f6; }
+    .admin-notif-popup .notif-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .admin-notif-popup .notif-content { flex: 1; }
+    .admin-notif-popup .notif-content strong { display: block; font-size: 0.9rem; color: #0a192f; margin-bottom: 2px; }
+    .admin-notif-popup .notif-content p { font-size: 0.78rem; color: #64748b; margin: 0; line-height: 1.4; }
+    .admin-notif-popup button { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #94a3b8; }
+    .admin-notif-popup button:hover { color: #64748b; }
+
+    /* Chat Block in Tab-Chat */
+    .chat-msg-card {
+      background: white; border-radius: 16px; padding: 20px 24px;
+      border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: all 0.3s; position: relative;
+    }
+    .chat-msg-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
+    .chat-msg-card.unread { border-left: 4px solid #ef4444; background: #fffcfc; }
+    .chat-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .chat-card-sender { font-weight: 700; color: #0a192f; font-size: 0.95rem; }
+    .chat-card-phone { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+    .chat-card-time { font-size: 0.75rem; color: #94a3b8; }
+    .chat-card-body { color: #334155; font-size: 0.88rem; line-height: 1.5; margin-bottom: 16px; white-space: pre-line; }
+    .chat-card-actions { display: flex; gap: 12px; align-items: center; }
+    .chat-reply-wa-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #25D366; color: white; border: none; border-radius: 8px;
+      padding: 8px 16px; font-size: 0.8rem; font-weight: 700; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .chat-reply-wa-btn:hover { background: #128C7E; transform: translateY(-1px); }
+
+    /* Verification Modal & Preview image */
+    .proof-thumbnail {
+      width: 60px; height: 60px; object-fit: cover; border-radius: 8px;
+      cursor: pointer; border: 1px solid #cbd5e1; transition: all 0.2s;
+    }
+    .proof-thumbnail:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    
+    /* Overlay Modal Bukti */
+    .proof-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 3000;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .proof-overlay.open { display: flex; }
+    .proof-modal-card {
+      background: white; border-radius: 20px; max-width: 500px; width: 100%;
+      padding: 24px; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .proof-modal-img { max-width: 100%; max-height: 380px; object-fit: contain; border-radius: 10px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="admin-header">
+    <div class="admin-title">
+      <i data-lucide="shield-check" style="color: var(--accent-color);"></i>
+      Deksdigital Admin Panel <span>Platform Owner</span>
+    </div>
+    <div class="admin-user-info">
+      <span style="font-weight: 600;"><i data-lucide="user" style="width: 14px; height: 14px; display:inline-block; vertical-align:middle; margin-right:5px;"></i>Halo, Admin Utama</span>
+      <button class="logout-link" onclick="handleLogout()">Keluar</button>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <button class="sidebar-tab-btn active" onclick="switchTab('tab-reports')">
+        <i data-lucide="bar-chart-2"></i> Ringkasan & Laporan
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-features')">
+        <i data-lucide="toggle-left"></i> Manajemen Fitur
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-design')">
+        <i data-lucide="palette"></i> Desain & Tata Letak
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-products')">
+        <i data-lucide="package"></i> Kelola Produk
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-orders')">
+        <i data-lucide="shopping-bag"></i> Daftar Pesanan
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-coupons')">
+        <i data-lucide="ticket"></i> Kelola Kupon Diskon
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-verification')" style="display: none;">
+        <i data-lucide="shield-alert"></i> Verifikasi Transfer <span id="badge-verification" class="admin-badge" style="display:none; background:#ef4444; color:white; border-radius:10px; padding:1px 6px; font-size:0.7rem; font-weight:700; margin-left:5px; vertical-align:middle;">0</span>
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-chat')">
+        <i data-lucide="message-square"></i> Tanya Admin <span id="badge-chat" class="admin-badge" style="display:none; background:#ef4444; color:white; border-radius:10px; padding:1px 6px; font-size:0.7rem; font-weight:700; margin-left:5px; vertical-align:middle;">0</span>
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-security')" style="border-top: 1px solid rgba(255,255,255,0.1); margin-top:8px; padding-top:16px;">
+        <i data-lucide="lock"></i> Akun &amp; Keamanan
+      </button>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main-content">
+      
+      <!-- ==========================================
+           TAB 1: RINGKASAN & LAPORAN
+           ========================================== -->
+      <section id="tab-reports" class="panel-section active">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Ringkasan & Laporan</h1>
+          <p class="panel-subtitle">Pantau volume transaksi, pendapatan komisi mitra, dan statistik platform.</p>
+        </div>
+
+        <!-- Dashboard Stat Cards -->
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-info">
+              <h3>Volume Transaksi</h3>
+              <p id="stat-sales">Rp 0</p>
+            </div>
+            <div class="stat-icon"><i data-lucide="wallet"></i></div>
+          </div>
+          
+          <div class="stat-card green">
+            <div class="stat-info">
+              <h3>Komisi Layanan (Pendapatan Anda)</h3>
+              <p id="stat-commission" style="color: #22c55e;">Rp 0</p>
+            </div>
+            <div class="stat-icon"><i data-lucide="trending-up"></i></div>
+          </div>
+
+          <div class="stat-card orange">
+            <div class="stat-info">
+              <h3>Jumlah Mitra Penjual</h3>
+              <p id="stat-partners">0 Mitra</p>
+            </div>
+            <div class="stat-icon"><i data-lucide="users"></i></div>
+          </div>
+
+          <div class="stat-card purple">
+            <div class="stat-info">
+              <h3>Total Order Masuk</h3>
+              <p id="stat-orders">0 Pesanan</p>
+            </div>
+            <div class="stat-icon"><i data-lucide="shopping-cart"></i></div>
+          </div>
+        </div>
+
+        <!-- Finansial Detail & Mitra Lists -->
+        <div class="settings-grid">
+          <!-- Tabel Pendapatan Mitra -->
+          <div class="table-card">
+            <div class="table-header-row">
+              <div class="table-header-title">Daftar Mitra & Persentase Komisi</div>
+            </div>
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Nama Toko Mitra</th>
+                    <th>Nomor WhatsApp</th>
+                    <th style="text-align: right;">Komisi Platform (%)</th>
+                    <th style="text-align: right;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="reports-partners-list">
+                  <!-- Dimuat dinamis -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Laporan Histori Pendapatan Transaksi -->
+          <div class="table-card">
+            <div class="table-header-row">
+              <div class="table-header-title">Histori Pembagian Komisi</div>
+            </div>
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Nama Pembeli</th>
+                    <th style="text-align: right;">Biaya Layanan Admin</th>
+                  </tr>
+                </thead>
+                <tbody id="reports-fees-list">
+                  <!-- Dimuat dinamis -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 2: MANAJEMEN FITUR (TOGGLES)
+           ========================================== -->
+      <section id="tab-features" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Manajemen Fitur & Modul Halaman Depan</h1>
+          <p class="panel-subtitle">Aktifkan atau nonaktifkan modul storefront secara instan tanpa menyentuh kode.</p>
+        </div>
+
+        <div style="max-width: 700px;" class="settings-card">
+          <h2 class="settings-card-title"><i data-lucide="sliders"></i> Saklar Modul Halaman Depan</h2>
+          
+          <div class="toggle-group">
+            <div class="toggle-label-wrapper">
+              <span class="toggle-name">Bilah Pengumuman & Promo Banner</span>
+              <p class="toggle-desc">Menampilkan atau menyembunyikan banner teks berjalan di bagian paling atas storefront.</p>
+            </div>
+            <label class="switch-control">
+              <input type="checkbox" id="feat-promo-banner" onchange="saveFeatureToggles()">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-label-wrapper">
+              <span class="toggle-name">Bilah Pencarian Produk</span>
+              <p class="toggle-desc">Menampilkan bilah pencarian input nama produk di bagian header navigasi pembeli.</p>
+            </div>
+            <label class="switch-control">
+              <input type="checkbox" id="feat-search-bar" onchange="saveFeatureToggles()">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-label-wrapper">
+              <span class="toggle-name">Peringatan Stok Tipis (Stock Warning)</span>
+              <p class="toggle-desc">Menampilkan badge merah "Stok Menipis" di halaman katalog dan detail jika jumlah produk berada di bawah batas minimal.</p>
+            </div>
+            <label class="switch-control">
+              <input type="checkbox" id="feat-stock-alert" onchange="saveFeatureToggles()">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-label-wrapper">
+              <span class="toggle-name">Widget Chat CS WhatsApp</span>
+              <p class="toggle-desc">Menampilkan tombol melayang berwarna hijau di pojok kanan bawah storefront untuk terhubung langsung ke WA Customer Service.</p>
+            </div>
+            <label class="switch-control">
+              <input type="checkbox" id="feat-whatsapp-chat" onchange="saveFeatureToggles()">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-group">
+            <div class="toggle-label-wrapper">
+              <span class="toggle-name">Seksi Ulasan Pelanggan</span>
+              <p class="toggle-desc">Menampilkan tab ulasan/rating pembeli pada halaman detail produk.</p>
+            </div>
+            <label class="switch-control">
+              <input type="checkbox" id="feat-reviews" onchange="saveFeatureToggles()">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Section No-Code Builder Form Informasi Penerima Kustom -->
+        <div style="max-width: 700px; margin-top: 30px;" class="settings-card">
+          <h2 class="settings-card-title"><i data-lucide="form-input"></i> Form Informasi Penerima Kustom (No-Code Builder)</h2>
+          <p style="font-size:0.85rem; color:#64748b; margin-bottom:20px;">Tambah atau sesuaikan kolom tambahan pada form pemesanan pembeli (misal: Nama Device, Merek Device, Email Akun App Premium, dll).</p>
+          
+          <div id="custom-fields-crud-list" style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
+            <!-- Dimuat dinamis oleh admin.js -->
+          </div>
+
+          <div style="background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; padding:16px; margin-bottom:20px;">
+            <span style="font-weight:700; font-size:0.85rem; color:var(--secondary-color); display:block; margin-bottom:10px;">+ Tambah Kolom Kustom Baru:</span>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+              <input type="text" id="new-cf-label" class="form-control" placeholder="Nama Label (cth: Nama / Tipe Device)">
+              <input type="text" id="new-cf-placeholder" class="form-control" placeholder="Placeholder (cth: Contoh: iPhone 14, Samsung...)">
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+              <label style="font-size:0.85rem; font-weight:600; display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" id="new-cf-required"> Wajib Diisi Pelanggan
+              </label>
+              <button class="btn-admin primary" style="padding:8px 14px;" onclick="addCustomCustomerFieldAdmin()">
+                <i data-lucide="plus-circle"></i> Tambah Kolom
+              </button>
+            </div>
+          </div>
+
+          <button class="btn-admin primary" style="width:100%; justify-content:center; padding:12px;" onclick="saveCustomCustomerFieldsAdmin()">
+            <i data-lucide="save"></i> Simpan Kolom Kustom Informasi Penerima
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 3: DESAIN & TATA LETAK
+           ========================================== -->
+      <section id="tab-design" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Desain & Tata Letak</h1>
+          <p class="panel-subtitle">Kustomisasi palet warna tema storefront dan urutkan susunan baris landing page Anda.</p>
+        </div>
+
+        <div class="settings-grid">
+          <!-- Kustomisasi Warna Tema -->
+          <div class="settings-card">
+            <h2 class="settings-card-title"><i data-lucide="palette"></i> Skema Warna Toko (CSS Variables)</h2>
+            
+            <div class="color-picker-row">
+              <div class="color-info">
+                <span class="color-label">Warna Utama (Primary Navy)</span>
+                <span style="font-size:0.75rem; color:#64748b;">Header, footer, tombol utama.</span>
+              </div>
+              <input type="color" id="theme-primary" class="color-picker-input">
+            </div>
+
+            <div class="color-picker-row">
+              <div class="color-info">
+                <span class="color-label">Warna Sekunder (Dark Blue)</span>
+                <span style="font-size:0.75rem; color:#64748b;">Latar header, sidebar dasbor admin.</span>
+              </div>
+              <input type="color" id="theme-secondary" class="color-picker-input">
+            </div>
+
+            <div class="color-picker-row">
+              <div class="color-info">
+                <span class="color-label">Warna Aksen (Orange/Contrast)</span>
+                <span style="font-size:0.75rem; color:#64748b;">Tombol beli sekarang, harga produk, lencana.</span>
+              </div>
+              <input type="color" id="theme-accent" class="color-picker-input">
+            </div>
+
+            <div class="color-picker-row">
+              <div class="color-info">
+                <span class="color-label">Warna Latar Belakang (Body BG)</span>
+                <span style="font-size:0.75rem; color:#64748b;">Latar belakang seluruh halaman storefront.</span>
+              </div>
+              <input type="color" id="theme-bg" class="color-picker-input">
+            </div>
+
+            <button class="btn-admin primary" style="margin-top: 15px; width:100%; justify-content:center; padding:12px;" onclick="saveDesignColors()">
+              Simpan Warna Tema
+            </button>
+          </div>
+
+          <!-- Hero Banner Image Upload -->
+          <div class="settings-card" style="display:flex; flex-direction:column;">
+            <h2 class="settings-card-title"><i data-lucide="image"></i> Unggah Gambar Hero Banner</h2>
+            
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:space-between; gap:20px;">
+              <p style="font-size:0.85rem; color:#64748b;">Silakan pilih dan unggah file gambar banner promosi halaman utama Anda (format .png, .jpg, .jpeg, .webp). Gambar ini akan langsung menggantikan gambar banner lama di storefront.</p>
+              
+              <div class="img-preview-box" style="height: 160px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 10px;">
+                <img id="hero-banner-preview" src="/uploads/hero-banner.png" alt="Hero Banner Preview" style="max-height: 100%; object-fit: cover; width: 100%;">
+              </div>
+
+              <div>
+                <input type="file" id="hero-file-input" style="display:none;" onchange="previewHeroFile()" accept="image/*">
+                <button class="btn-admin accent" style="width:100%; justify-content:center; padding:12px; margin-bottom:10px;" onclick="document.getElementById('hero-file-input').click()">
+                  <i data-lucide="file-image"></i> Pilih Gambar Banner
+                </button>
+                <button class="btn-admin primary" style="width:100%; justify-content:center; padding:12px;" onclick="uploadHeroImage()">
+                  <i data-lucide="upload-cloud"></i> Unggah Banner Sekarang
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trust Badges Editor (Full Width) -->
+          <div class="settings-card" style="margin-top: 30px;">
+            <h2 class="settings-card-title"><i data-lucide="badge-check"></i> Edit Icon Bar Informasi Toko (Kotak Putih)</h2>
+            <p style="font-size:0.85rem; color:#64748b; margin-bottom:20px;">Ubah judul dan deskripsi setiap icon badge yang tampil di kotak putih bawah header halaman utama. Perubahan langsung tercermin di toko.</p>
+
+            <div id="trust-badges-editor" style="display: flex; flex-direction: column; gap: 14px;">
+              <!-- Dirender via JavaScript -->
+            </div>
+
+            <button class="btn-admin primary" style="margin-top:20px; width:100%; justify-content:center; padding:12px;" onclick="saveTrustBadges()">
+              <i data-lucide="save"></i> Simpan Perubahan Icon Bar
+            </button>
+          </div>
+
+          <!-- Papan Iklan & Poster Promo Editor (Full Width) -->
+          <div class="settings-card" style="margin-top: 30px;">
+            <h2 class="settings-card-title"><i data-lucide="image"></i> Papan Iklan & Poster Promo (Slide Carousel)</h2>
+            <p style="font-size:0.85rem; color:#64748b; margin-bottom:20px;">Kelola gambar poster promo, iklan berjalan, dan banner diskon yang tampil berganti di halaman utama toko.</p>
+
+            <!-- Daftar Slide Aktif -->
+            <div style="margin-bottom: 24px;">
+              <span style="font-weight: 700; font-size: 0.9rem; color: var(--secondary-color); display:block; margin-bottom:12px;">Daftar Poster Promo Aktif:</span>
+              <div id="promo-banners-list-admin" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+                <!-- Dirender via JavaScript -->
+              </div>
+            </div>
+
+            <!-- Form Tambah Slide Baru -->
+            <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 16px; padding: 20px;">
+              <span style="font-weight: 700; font-size: 0.9rem; color: var(--secondary-color); display:block; margin-bottom:14px;">+ Tambah Poster Promo Baru:</span>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:0.8rem; font-weight:600;">File Gambar Poster (Gambar/Banner)</label>
+                  <input type="file" id="promo-banner-file-input" accept="image/*" class="form-control" style="height:42px;">
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:0.8rem; font-weight:600;">Tag / Subjudul (Cth: 🔥 DISKON SPESIAL)</label>
+                  <input type="text" id="promo-tag-input" class="form-control" placeholder="Cth: PROMO MINGGU INI" value="🔥 PROMO SPESIAL" style="height:42px;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:0.8rem; font-weight:600;">Judul Utama Poster</label>
+                  <input type="text" id="promo-title-input" class="form-control" placeholder="Cth: Diskon Hingga 50% Gaming Gear" style="height:42px;">
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:0.8rem; font-weight:600;">Deskripsi Singkat</label>
+                  <input type="text" id="promo-desc-input" class="form-control" placeholder="Cth: Penawaran terbatas untuk keyboard & aksesoris." style="height:42px;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:0.8rem; font-weight:600;">Teks Tombol Aksi</label>
+                  <input type="text" id="promo-btn-text-input" class="form-control" value="Belanja Promo" placeholder="Cth: Belanja Promo" style="height:42px;">
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:0.8rem; font-weight:600;">Link Tujuan Tombol</label>
+                  <input type="text" id="promo-btn-link-input" class="form-control" value="#sec-products" placeholder="Cth: #sec-products atau /kemitraan.html" style="height:42px;">
+                </div>
+              </div>
+
+              <button class="btn-admin primary" style="width:100%; justify-content:center; padding:12px;" onclick="uploadPromoBannerAdmin()">
+                <i data-lucide="plus-circle"></i> Tambah Poster Promo Ke Carousel
+              </button>
+            </div>
+          </div>
+
+          <!-- Urutan Landing Page & Teks Global -->
+          <div class="settings-card">
+            <h2 class="settings-card-title"><i data-lucide="layout"></i> Tata Letak Beranda & Teks Global</h2>
+            
+            <div style="margin-bottom: 20px;">
+              <label class="form-group" style="display:block; margin-bottom:15px;">
+                <span style="font-weight:600; font-size:0.85rem; color:var(--secondary-color); display:block; margin-bottom:5px;">Nama Toko E-Commerce</span>
+                <input type="text" id="shop-name-input" class="form-control" placeholder="Isi nama toko Anda...">
+              </label>
+              <label class="form-group" style="display:block; margin-bottom:15px;">
+                <span style="font-weight:600; font-size:0.85rem; color:var(--secondary-color); display:block; margin-bottom:5px;">Teks Berjalan Pengumuman</span>
+                <input type="text" id="announcement-input" class="form-control" placeholder="Tulis promo atau pengumuman...">
+              </label>
+              <label class="form-group" style="display:block; margin-bottom:15px;">
+                <span style="font-weight:600; font-size:0.85rem; color:var(--secondary-color); display:block; margin-bottom:5px;">Batas Peringatan Stok Tipis (Threshold)</span>
+                <input type="number" id="stock-threshold-input" class="form-control" value="5" min="1" max="100">
+              </label>
+              <label class="form-group" style="display:block; margin-bottom:15px;">
+                <span style="font-weight:600; font-size:0.85rem; color:var(--secondary-color); display:block; margin-bottom:5px;">Google Gemini API Key (Untuk AI Chatbot)</span>
+                <input type="password" id="gemini-apikey-input" class="form-control" placeholder="Masukkan Gemini API Key untuk mengaktifkan AI...">
+              </label>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <span style="font-weight: 700; font-size: 0.9rem; color: var(--secondary-color); display:block; margin-bottom:10px;">Urutan Tata Letak Section Beranda:</span>
+              <div class="layout-sorter-list" id="layout-sortable-container">
+                <!-- Diurutkan via JavaScript -->
+              </div>
+            </div>
+
+            <button class="btn-admin primary" style="width:100%; justify-content:center; padding:12px;" onclick="saveLayoutAndTexts()">
+              Simpan Tata Letak & Teks
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB SETTINGS: KONFIGURASI WHATSAPP & NOTIFIKASI
+           ========================================== -->
+      <section id="tab-settings" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Pengaturan Toko &amp; Notifikasi</h1>
+          <p class="panel-subtitle">Konfigurasi WhatsApp CS, template invoice, email, dan suara notifikasi.</p>
+        </div>
+
+
+        <!-- WhatsApp Kontak & Template Pesanan -->
+        <div style="max-width: 700px; margin-top:35px;" class="settings-card">
+          <h2 class="settings-card-title"><i data-lucide="phone-call"></i> WhatsApp & Draf Template Invoice CS</h2>
+          <div class="form-group">
+            <label>Nomor WhatsApp Penerima Transaksi (Gunakan Kode Negara, cth: 628123456789)</label>
+            <input type="text" id="shop-wa-input" class="form-control" placeholder="Masukkan nomor WA Admin...">
+          </div>
+          <div class="form-group">
+            <label>Template Pesan Pembuka Widget CS WA</label>
+            <input type="text" id="shop-wa-greeting-input" class="form-control" placeholder="Contoh: Halo CS Deksdigital...">
+          </div>
+          <div class="form-group">
+            <label>Template Teks Invoice Transaksi WA (Gunakan variabel: {orderId}, {items}, {total}, {name}, {phone}, {address})</label>
+            <textarea id="shop-wa-invoice-input" class="form-control" rows="5" placeholder="Teks pesanan otomatis..."></textarea>
+          </div>
+          <button class="btn-admin primary" style="width:100%; justify-content:center; padding:12px;" onclick="saveWaConfigs()">
+            Simpan Konfigurasi WhatsApp
+          </button>
+        </div>
+
+        <!-- Email & Suara Notifikasi -->
+        <div style="max-width: 700px; margin-top:35px;" class="settings-card">
+          <h2 class="settings-card-title"><i data-lucide="bell"></i> Notifikasi Suara & Email (Real-Time)</h2>
+          
+          <div class="form-group">
+            <label class="toggle-group" style="display:flex; justify-content:space-between; align-items:center; border:none; padding:0; margin-bottom:15px;">
+              <div class="toggle-label-wrapper">
+                <span class="toggle-name" style="font-weight:600; font-size:0.9rem;">Aktifkan Notifikasi Email</span>
+                <p class="toggle-desc" style="font-size:0.75rem; color:#64748b; margin-top:2px;">Kirim email otomatis ke administrator setiap kali ada pertanyaan atau upload bukti transfer.</p>
+              </div>
+              <label class="switch-control">
+                <input type="checkbox" id="email-notif-enabled" onchange="saveEmailSettings()">
+                <span class="switch-slider"></span>
+              </label>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>Email Administrator Penerima</label>
+            <input type="email" id="email-admin-input" class="form-control" placeholder="deksoreo22@gmail.com" onchange="saveEmailSettings()">
+          </div>
+
+          <div class="form-group">
+            <label>SMTP User (Gmail Pengirim)</label>
+            <input type="text" id="email-smtp-user" class="form-control" placeholder="deksoreo22@gmail.com" onchange="saveEmailSettings()">
+          </div>
+
+          <div class="form-group">
+            <label>SMTP Password (Gmail App Password)</label>
+            <input type="password" id="email-smtp-pass" class="form-control" placeholder="••••••••••••" onchange="saveEmailSettings()">
+          </div>
+
+          <div class="form-group" style="border-top:1px solid var(--border-color); padding-top:20px; margin-top:20px;">
+            <label>Suara Notifikasi Kustom (.mp3, .wav, .ogg, .aac)</label>
+            <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+              <input type="file" id="sound-file-input" accept="audio/*" style="display:none;" onchange="uploadNotificationSound()">
+              <button class="btn-admin accent" style="padding:10px 16px;" onclick="document.getElementById('sound-file-input').click()">
+                <i data-lucide="music"></i> Pilih File Suara
+              </button>
+              <button class="btn-admin primary" id="btn-play-sound" style="padding:10px 16px;" onclick="playNotificationSound()">
+                <i data-lucide="play"></i> Putar Suara
+              </button>
+            </div>
+            <span id="current-sound-label" style="font-size:0.75rem; color:#64748b; display:block; margin-top:8px;">Suara: Bunyi Sintesis Browser (Default)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB AKUN & KEAMANAN
+           ========================================== -->
+      <section id="tab-security" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Akun &amp; Keamanan</h1>
+          <p class="panel-subtitle">Kelola keamanan akun admin — ganti password login kapan saja.</p>
+        </div>
+
+        <div style="max-width: 600px;" class="settings-card">
+          <h2 class="settings-card-title"><i data-lucide="lock"></i> Ganti Password Admin</h2>
+          <p style="font-size:0.82rem; color:#64748b; margin-bottom:24px; line-height:1.7;">
+            Masukkan password lama Anda untuk konfirmasi, lalu isi password baru minimal 6 karakter.
+          </p>
+
+          <div class="form-group">
+            <label>Password Lama (Saat Ini)</label>
+            <div style="position:relative;">
+              <input type="password" id="admin-old-password" class="form-control" placeholder="Masukkan password lama Anda..." style="padding-right:48px;">
+              <button type="button" onclick="togglePwdVisibility('admin-old-password', this)"
+                style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#94a3b8; padding:4px; display:flex; align-items:center;">
+                <i data-lucide="eye" style="width:18px; height:18px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Password Baru</label>
+            <div style="position:relative;">
+              <input type="password" id="admin-new-password" class="form-control" placeholder="Min. 6 karakter..." style="padding-right:48px;" oninput="checkPasswordStrength()">
+              <button type="button" onclick="togglePwdVisibility('admin-new-password', this)"
+                style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#94a3b8; padding:4px; display:flex; align-items:center;">
+                <i data-lucide="eye" style="width:18px; height:18px;"></i>
+              </button>
+            </div>
+            <!-- Indikator kekuatan password -->
+            <div id="pwd-strength-wrap" style="margin-top:8px; display:none;">
+              <div style="height:5px; background:#e2e8f0; border-radius:10px; overflow:hidden;">
+                <div id="pwd-strength-bar" style="height:100%; width:0%; border-radius:10px; transition:all 0.35s ease;"></div>
+              </div>
+              <span id="pwd-strength-label" style="font-size:0.72rem; font-weight:600; margin-top:5px; display:block;"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Konfirmasi Password Baru</label>
+            <div style="position:relative;">
+              <input type="password" id="admin-confirm-password" class="form-control" placeholder="Ulangi password baru..." style="padding-right:48px;" oninput="checkPasswordMatch()">
+              <button type="button" onclick="togglePwdVisibility('admin-confirm-password', this)"
+                style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#94a3b8; padding:4px; display:flex; align-items:center;">
+                <i data-lucide="eye" style="width:18px; height:18px;"></i>
+              </button>
+            </div>
+            <span id="pwd-match-label" style="font-size:0.72rem; font-weight:600; margin-top:5px; display:block; min-height:18px;"></span>
+          </div>
+
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:20px; font-size:0.8rem; color:#64748b; line-height:1.6;">
+            <strong style="color:#0a192f; display:block; margin-bottom:4px;">&#128274; Tips Password Aman:</strong>
+            &#10003; Minimal 6 karakter &nbsp;&#10003; Gabungkan huruf besar &amp; kecil &nbsp;&#10003; Sertakan angka atau simbol
+          </div>
+
+          <button class="btn-admin primary" style="width:100%; justify-content:center; padding:14px; font-size:0.95rem; font-weight:700;" onclick="changeAdminPassword()">
+            <i data-lucide="shield-check"></i>&nbsp; Simpan Password Baru
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 5: KELOLA PRODUK (CRUD)
+           ========================================== -->
+      <section id="tab-products" class="panel-section">
+        <div class="panel-title-header" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <h1 class="panel-title">Kelola Produk</h1>
+            <p class="panel-subtitle">Tambahkan, sunting, atau hapus katalog produk resmi milik Deksdigital.</p>
+          </div>
+          <button class="btn-admin primary" onclick="openAddProductModal()">
+            <i data-lucide="plus-circle"></i> Tambah Produk Baru
+          </button>
+        </div>
+
+        <div class="table-card">
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Gambar</th>
+                  <th>Nama Produk</th>
+                  <th>Kategori</th>
+                  <th style="text-align: right;">Harga Dasar</th>
+                  <th>Pemilik</th>
+                  <th style="text-align: center;">Stok</th>
+                  <th style="text-align: center;">Status</th>
+                  <th style="text-align: right;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-list">
+                <!-- Dimuat dinamis -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 6: DAFTAR PESANAN (ORDERS MONITOR)
+           ========================================== -->
+      <section id="tab-orders" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Kelola Pesanan Masuk</h1>
+          <p class="panel-subtitle">Pantau pembayaran QRIS, perbarui status transaksi, dan verifikasi invoice pembeli.</p>
+        </div>
+
+        <div class="table-card">
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>No. Invoice</th>
+                  <th>Tanggal</th>
+                  <th>Nama Pelanggan</th>
+                  <th>Items</th>
+                  <th style="text-align: right;">Total Bayar</th>
+                  <th style="text-align: center;">Status</th>
+                  <th style="text-align: right;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-list">
+                <!-- Dimuat dinamis -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 7: VERIFIKASI TRANSFER MANUAL
+           ========================================== -->
+      <section id="tab-verification" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Verifikasi Pembayaran Manual</h1>
+          <p class="panel-subtitle">Periksa screenshot bukti transfer yang diunggah pembeli dan lakukan konfirmasi/tolak.</p>
+        </div>
+
+        <div class="table-card">
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>No. Invoice</th>
+                  <th>Tanggal Upload</th>
+                  <th>Nama Pembeli</th>
+                  <th style="text-align: right;">Total Bayar</th>
+                  <th style="text-align: center;">Bukti Transfer</th>
+                  <th style="text-align: right;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="admin-pending-verification-list">
+                <!-- Dimuat dinamis -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 9: KELOLA KUPON DISKON
+           ========================================== -->
+      <section id="tab-coupons" class="panel-section">
+        <div class="panel-title-header" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <h1 class="panel-title">Kelola Kupon / Kode Diskon</h1>
+            <p class="panel-subtitle">Buat, aktifkan, atau hapus kode kupon diskon unik untuk pembeli.</p>
+          </div>
+          <button class="btn-admin primary" onclick="openAddCouponModal()">
+            <i data-lucide="plus-circle"></i> Tambah Kupon Baru
+          </button>
+        </div>
+
+        <div class="table-card">
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Kode Kupon</th>
+                  <th>Berlaku Untuk</th>
+                  <th>Tipe Diskon</th>
+                  <th style="text-align: right;">Nilai Diskon</th>
+                  <th style="text-align: right;">Min. Belanja</th>
+                  <th style="text-align: center;">Status</th>
+                  <th style="text-align: right;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="admin-coupons-list">
+                <!-- Dimuat dinamis -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 8: TANYA ADMIN (CUSTOMER CHATS)
+           ========================================== -->
+      <section id="tab-chat" class="panel-section">
+        <div class="panel-title-header" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <h1 class="panel-title">Pesan Masuk (Tanya Admin)</h1>
+            <p class="panel-subtitle">Daftar pertanyaan pembeli sebelum checkout. Balas langsung via nomor WhatsApp mereka.</p>
+          </div>
+          <button class="btn-admin primary" onclick="readAllChats()">
+            <i data-lucide="check-check"></i> Tandai Semua Dibaca
+          </button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px; margin-top:20px;" id="admin-chats-list">
+          <!-- Dimuat dinamis -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Overlay Modal Bukti Transfer -->
+  <div class="proof-overlay" id="proof-overlay" onclick="closeProofModal(event)">
+    <div class="proof-modal-card" onclick="event.stopPropagation()">
+      <button class="close-modal" onclick="closeProofModal(event)">&times;</button>
+      <h2 style="font-size:1.2rem; font-weight:800; color:var(--primary-color); margin-bottom:15px;">Bukti Transfer Pembayaran</h2>
+      <img id="proof-modal-image" class="proof-modal-img" src="" alt="Bukti Transfer">
+      <div style="display:flex; gap:12px; justify-content:center;">
+        <button class="btn-admin cancel" style="background:#ef4444; color:white; border-color:#ef4444;" onclick="openRejectionReasonPrompt()">
+          <i data-lucide="x-circle"></i> Tolak Bukti
+        </button>
+        <button class="btn-admin primary" style="background:#22c55e; color:white; border-color:#22c55e;" onclick="verifyPaymentFromModal('approve')">
+          <i data-lucide="check-circle"></i> Setujui (Lunas)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL DIALOG DIASBORD ADMIN (Tambah/Edit Produk)
+       ========================================== -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-card">
+      <button class="close-modal" onclick="closeProductModal()">&times;</button>
+      <h2 id="modal-product-title" style="font-size:1.3rem; font-weight:800; color:var(--primary-color); margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        Tambah Produk Baru
+      </h2>
+      
+      <form id="product-crud-form" onsubmit="saveProductSubmit(event)">
+        <input type="hidden" id="p-id-field">
+        
+        <div class="form-group">
+          <label>Nama Produk</label>
+          <input type="text" id="p-name-field" class="form-control" placeholder="Contoh: Keyboard Mechanical RGB..." required>
+        </div>
+
+        <div class="settings-grid" style="gap:15px; margin-bottom:15px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Kategori</label>
+            <select id="p-category-field" class="form-control" style="height:45px;">
+              <option value="Aksesoris">Aksesoris</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Umum">Umum</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Status Produk</label>
+            <select id="p-status-field" class="form-control" style="height:45px;">
+              <option value="aktif">Aktif (Tampil)</option>
+              <option value="nonaktif">Nonaktif (Sembunyi)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-grid" style="gap:15px; margin-bottom:15px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Harga Produk (Rupiah)</label>
+            <input type="number" id="p-price-field" class="form-control" placeholder="Contoh: 150000" required>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Stok Produk</label>
+            <input type="number" id="p-stock-field" class="form-control" placeholder="Contoh: 10" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Deskripsi Produk</label>
+          <textarea id="p-desc-field" class="form-control" rows="4" placeholder="Tulis spesifikasi lengkap produk di sini..." required></textarea>
+          <button type="button" class="btn-ai-sparkle" onclick="generateDescriptionAI()">
+            <i data-lucide="sparkles" style="width:14px; height:14px;"></i> Buat Deskripsi dengan AI Gemini
+          </button>
+        </div>
+
+        <!-- Pilihan Jenis Pengiriman & Detil Berat/Asal -->
+        <div class="settings-grid" style="gap:15px; margin-bottom:15px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Jenis Pengiriman</label>
+            <select id="p-delivery-type-field" class="form-control" style="height:45px;" onchange="toggleShippingFields()">
+              <option value="digital">Digital (Download / Konten)</option>
+              <option value="fisik">Fisik (Dikirim via Kurir)</option>
+              <option value="pickup">Ambil Sendiri (Pickup)</option>
+            </select>
+          </div>
+          <div class="form-group" id="p-weight-group" style="margin-bottom:0; display:none;">
+            <label>Berat Produk (Gram)</label>
+            <input type="number" id="p-weight-field" class="form-control" placeholder="Contoh: 500" value="0">
+          </div>
+        </div>
+
+        <div class="settings-grid" id="p-shipping-origin-group" style="gap:15px; margin-bottom:15px; display:none;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Kota Asal Pengiriman</label>
+            <select id="p-origin-city-field" class="form-control" style="height:45px;">
+              <option value="Jakarta">Jakarta</option>
+              <option value="Bandung">Bandung</option>
+              <option value="Bekasi">Bekasi</option>
+              <option value="Bogor">Bogor</option>
+              <option value="Depok">Depok</option>
+              <option value="Semarang">Semarang</option>
+              <option value="Surakarta">Surakarta</option>
+              <option value="Surabaya">Surabaya</option>
+              <option value="Malang">Malang</option>
+              <option value="Yogyakarta">Yogyakarta</option>
+              <option value="Tangerang">Tangerang</option>
+              <option value="Serang">Serang</option>
+              <option value="Denpasar">Denpasar</option>
+              <option value="Medan">Medan</option>
+              <option value="Padang">Padang</option>
+              <option value="Pekanbaru">Pekanbaru</option>
+              <option value="Batam">Batam</option>
+              <option value="Palembang">Palembang</option>
+              <option value="Bandar Lampung">Bandar Lampung</option>
+              <option value="Pontianak">Pontianak</option>
+              <option value="Samarinda">Samarinda</option>
+              <option value="Balikpapan">Balikpapan</option>
+              <option value="Makassar">Makassar</option>
+              <option value="Manado">Manado</option>
+              <option value="Ambon">Ambon</option>
+              <option value="Jayapura">Jayapura</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Gambar Produk</label>
+          <div style="display:flex; gap:15px; align-items:center;">
+            <div class="img-preview-box" style="width:100px; height:100px; margin-top:0;">
+              <img id="p-img-preview" src="/uploads/default-product.jpg" alt="Preview" onerror="this.onerror=null; this.src='/uploads/default-product.jpg'">
+            </div>
+            <div style="flex:1;">
+              <input type="file" id="p-file-input" style="display:none;" onchange="previewProductImage()" accept="image/*">
+              <button type="button" class="btn-admin accent" style="width:100%; justify-content:center; padding:10px; margin-bottom:8px;" onclick="document.getElementById('p-file-input').click()">
+                Pilih Foto Produk
+              </button>
+              <span style="font-size:0.75rem; color:#64748b; display:block; text-align:center;">Maksimal ukuran file gambar 2MB.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-btn-row" style="margin-top:25px; justify-content:flex-end;">
+          <button type="button" class="btn-admin cancel" onclick="closeProductModal()">Batal</button>
+          <button type="submit" class="btn-admin primary" id="modal-submit-btn">Simpan Produk</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DIALOG KELOLA KUPON (Tambah/Edit Kupon) -->
+  <div class="modal-overlay" id="coupon-modal">
+    <div class="modal-card" style="max-width: 480px;">
+      <button class="close-modal" onclick="closeCouponModal()">&times;</button>
+      <h2 id="modal-coupon-title" style="font-size:1.3rem; font-weight:800; color:var(--primary-color); margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        Tambah Kupon Baru
+      </h2>
+      
+      <form id="coupon-crud-form" onsubmit="saveCouponSubmit(event)">
+        <div class="form-group">
+          <label>Kode Kupon (Huruf Kapital &amp; Angka)</label>
+          <input type="text" id="coupon-code-field" class="form-control" style="text-transform: uppercase;" placeholder="Cth: CANVA20, DEKS10, AKSES5K" required>
+        </div>
+
+        <div class="form-group">
+          <label>&#127919; Berlaku Untuk Kategori Produk</label>
+          <select id="coupon-category-field" class="form-control" style="height:45px;" onchange="updateCouponCategoryHint()">
+            <option value="all">&#127760; Semua Produk (All Categories)</option>
+            <option value="Canva">&#127912; Canva</option>
+            <option value="Aksesoris">&#128433; Aksesoris</option>
+            <option value="Fashion">&#128087; Fashion</option>
+            <option value="Umum">&#128230; Umum</option>
+            <option value="Gaming">&#127918; Gaming</option>
+            <option value="Software">&#128187; Software</option>
+            <option value="Digital">&#128241; Digital</option>
+          </select>
+          <p id="coupon-category-hint" style="font-size:0.78rem; color:#64748b; margin-top:6px; padding:8px 12px; background:#f0fdf4; border-radius:8px; border-left:3px solid #22c55e;">
+            &#9989; Kupon ini berlaku untuk <strong>semua produk</strong> tanpa terkecuali.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>Tipe Potongan</label>
+          <select id="coupon-type-field" class="form-control" style="height:45px;">
+            <option value="percentage">Persentase (%)</option>
+            <option value="fixed">Nominal Tetap (Rupiah)</option>
+          </select>
+        </div>
+
+        <div class="settings-grid" style="gap:15px; margin-bottom:0;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Nilai Potongan (20 = 20% atau 50000 = Rp 50.000)</label>
+            <input type="number" id="coupon-value-field" class="form-control" placeholder="Cth: 20 atau 50000" min="0" required>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Minimum Belanja Rp (0 = tanpa syarat)</label>
+            <input type="number" id="coupon-min-purchase-field" class="form-control" placeholder="Cth: 100000" value="0" min="0">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:15px;">
+          <label>Status Kupon</label>
+          <select id="coupon-status-field" class="form-control" style="height:45px;">
+            <option value="aktif">Aktif</option>
+            <option value="nonaktif">Nonaktif</option>
+          </select>
+        </div>
+
+        <div class="action-btn-row" style="margin-top:25px; justify-content:flex-end;">
+          <button type="button" class="btn-admin cancel" onclick="closeCouponModal()">Batal</button>
+          <button type="submit" class="btn-admin primary" id="coupon-submit-btn">Simpan Kupon</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin JavaScript Controllers -->
+  <script src="/admin-dashboard/js/admin.js"></script>
+  <script src="/admin-dashboard/js/admin-notifications.js"></script>
+</body>
+</html>

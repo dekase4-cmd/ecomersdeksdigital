@@ -1,0 +1,116 @@
+{
+  "shopName": "Deksdigital",
+  "promoBanners": [
+    {
+      "id": "banner_1",
+      "imageUrl": "/uploads/hero-banner.png",
+      "tag": "🔥 DISKON SPESIAL",
+      "title": "Promo Aksesoris & Setup Gear",
+      "desc": "Dapatkan penawaran harga terbaik untuk aksesoris gaming & kantor original Deksdigital.",
+      "buttonText": "Cek Produk Diskon",
+      "buttonLink": "#sec-products"
+    },
+    {
+      "id": "banner_2",
+      "imageUrl": "/uploads/default-product.jpg",
+      "tag": "🤝 KEMITRAAN NO-CODE",
+      "title": "Bergabung & Jualan Tanpa Modal",
+      "desc": "Nikmati komisi hingga 20% per penjualan dengan sistem toko online otomatis.",
+      "buttonText": "Daftar Mitra Gratis",
+      "buttonLink": "/kemitraan.html"
+    }
+  ],
+  "trustBadges": [
+    {
+      "icon": "shield-check",
+      "title": "Garansi Resmi",
+      "desc": "Produk 100% Original"
+    },
+    {
+      "icon": "zap",
+      "title": "Proses Cepat",
+      "desc": "Order & proses instan"
+    },
+    {
+      "icon": "headphones",
+      "title": "CS 24/7",
+      "desc": "Via WhatsApp & AI"
+    },
+    {
+      "icon": "percent",
+      "title": "diskon pasti ada",
+      "desc": "hingga 5-20%"
+    },
+    {
+      "icon": "rotate-ccw",
+      "title": "Retur Mudah",
+      "desc": "Produk tidak sesuai"
+    }
+  ],
+  "announcement": "Selamat datang di Deksdigital Store! Nikmati promo belanja hemat mulai hari ini.",
+  "whatsappAdmin": "628123456789",
+  "whatsappGreeting": "Halo Admin Deksdigital, saya ingin bertanya tentang produk Anda.",
+  "whatsappInvoiceTemplate": "Halo Admin, saya ingin mengonfirmasi pembayaran untuk pesanan *{orderId}*.\n\n*Rincian Belanja*:\n{items}\n*Total Pembayaran*: {total}\n\n*Detail Penerima*:\nNama: {name}\nTelepon: {phone}\nAlamat: {address}\n\nLink Struk Digital: {receiptLink}\n\nBerikut bukti transfer pembayaran QRIS saya.",
+  "stockThreshold": 5,
+  "geminiApiKey": "",
+  "heroImage": "/uploads/hero-banner.png",
+  "adminEmail": "deksoreo22@gmail.com",
+  "emailNotifications": {
+    "enabled": true,
+    "smtpUser": "deksoreo22@gmail.com",
+    "smtpPass": "dekasafir4"
+  },
+  "notificationSound": "/uploads/notif_sound_1784469734223.mp3",
+  "theme": {
+    "primary": "#0a192f",
+    "secondary": "#1a6a74",
+    "accent": "#f97316",
+    "background": "#95b3d0",
+    "text": "#334155"
+  },
+  "features": {
+    "promoBanner": true,
+    "reviews": true,
+    "stockAlert": true,
+    "whatsappChat": true,
+    "newsletter": true,
+    "fastCheckout": false,
+    "searchBar": true,
+    "aiChat": true
+  },
+  "layout": [
+    "hero",
+    "categories",
+    "products",
+    "newsletter"
+  ],
+  "qris": {
+    "merchantName": "DEKSDIGITAL PAY",
+    "nmid": "ID102030405060",
+    "qrisImage": "/uploads/qris_1781945360045.jpg",
+    "instructions": [
+      "Buka aplikasi e-wallet (GoPay, OVO, Dana, LinkAja) atau Mobile Banking Anda.",
+      "Pilih menu 'Scan' atau 'Bayar QRIS'.",
+      "Arahkan kamera ke gambar QRIS yang tampil di layar.",
+      "Masukkan nominal pembayaran tepat sesuai dengan total belanja.",
+      "Selesaikan pembayaran dan simpan/screenshot bukti transfer Anda.",
+      "Unggah screenshot bukti transfer di kolom yang tersedia, lalu klik 'Kirim Bukti & Dapatkan Struk'."
+    ]
+  },
+  "customCustomerFields": [
+    {
+      "id": "field_device_name",
+      "label": "Nama / Tipe Device (HP / Laptop)",
+      "type": "text",
+      "placeholder": "Contoh: iPhone 14 Pro, Samsung S23, PC Windows...",
+      "required": false
+    },
+    {
+      "id": "field_device_brand",
+      "label": "Merek Device",
+      "type": "text",
+      "placeholder": "Contoh: Apple, Samsung, Xiaomi, Asus...",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deksdigital Store — Aksesoris Resmi & Setup Gear Terbaik</title>
+  <meta name="description" content="Belanja aksesoris komputer, keyboard, mousepad, dan gaming gear orisinal Deksdigital. Garansi resmi, pengiriman cepat, layanan pelanggan 24/7.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Main Store CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Announcement Bar (Toggled via Admin) -->
+  <div class="announcement-bar" style="display: none;">
+    <span id="announcement-text">🎁 Gratis Ongkir untuk pembelian pertama! | 🔥 Promo Flash Sale setiap Jumat | ⭐ Garansi Resmi Deksdigital</span>
+  </div>
+
+  <!-- Header Navigasi -->
+  <header id="site-header">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <i data-lucide="shopping-bag"></i>
+        <span class="shop-name-text">Deksdigital</span>
+      </a>
+      
+      <!-- Bilah Pencarian -->
+      <div class="search-container" id="search-form">
+        <input type="text" id="search-input" class="search-input" placeholder="Cari produk, keyboard, mousepad..." autocomplete="off">
+        <button type="button" id="search-submit" class="search-btn">
+          <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <!-- Navigasi Utama -->
+      <nav class="nav-links">
+        <a href="/" class="nav-link active">Beranda</a>
+        <a href="/kemitraan.html" class="nav-link">Kemitraan</a>
+        <a href="/cart.html" class="nav-link cart-icon-container" title="Keranjang Belanja">
+          <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
+          <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Container Utama -->
+  <main id="layout-container">
+    
+    <!-- Bagian 1: Hero Banner Premium -->
+    <section id="sec-hero" class="layout-section" style="margin-bottom: 0;">
+      <div class="hero-banner">
+        <div class="hero-content">
+          <div class="hero-eyebrow">
+            <span class="hero-tag">✦ Aksesoris Resmi</span>
+          </div>
+          <h1 class="hero-title">Upgrade Setup<br>Gaming & Office<br>Anda</h1>
+          <p class="hero-desc">Dapatkan aksesoris komputer, keyboard, mousepad, dan gaming gear orisinal Deksdigital dengan jaminan garansi resmi dan kualitas premium.</p>
+          <div class="hero-actions">
+            <a href="#sec-products" class="hero-btn" id="hero-shop-btn">
+              <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i>
+              Belanja Sekarang
+            </a>
+            <a href="/kemitraan.html" class="hero-btn-outline">
+              Jadi Mitra
+              <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-value">500+</span>
+              <span class="hero-stat-label">Produk</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">99%</span>
+              <span class="hero-stat-label">Kepuasan</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">24/7</span>
+              <span class="hero-stat-label">Support</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="/uploads/hero-banner.png" alt="Setup Gear Deksdigital" id="hero-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="hero-img-placeholder" style="display: none;">
+            <i data-lucide="monitor" style="width: 100px; height: 100px;"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Badges Strip -->
+    <section id="sec-trust" class="layout-section" style="margin-top: -24px; margin-bottom: 48px;">
+      <div class="trust-strip" id="trust-strip-container">
+        <!-- Dirender dinamis dari settings -->
+      </div>
+    </section>
+
+    <!-- Bagian 2: Kategori Filter -->
+    <section id="sec-categories" class="layout-section" style="margin-bottom: 36px;">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Jelajahi</div>
+          <h2 class="section-title">Kategori Produk</h2>
+          <p class="section-subtitle">Temukan gear favorit berdasarkan kategori</p>
+        </div>
+      </div>
+      <div class="categories-filter" id="categories-list">
+        <button class="category-tab active" onclick="filterCategory('Semua')">
+          ✦ Semua Produk
+        </button>
+        <button class="category-tab" onclick="filterCategory('Aksesoris')">Aksesoris</button>
+        <button class="category-tab" onclick="filterCategory('Elektronik')">Elektronik</button>
+        <button class="category-tab" onclick="filterCategory('Fashion')">Fashion</button>
+        <button class="category-tab" onclick="filterCategory('Umum')">Umum</button>
+      </div>
+    </section>
+
+    <!-- Bagian 3: Katalog Produk Utama -->
+    <section id="sec-products" class="layout-section">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Pilihan Terbaik</div>
+          <h2 class="section-title">Katalog Produk Toko & Mitra</h2>
+          <p class="section-subtitle">Temukan produk orisinal Deksdigital dan produk pilihan terbaik dari mitra kami</p>
+        </div>
+        <a href="#" class="section-link" onclick="filterCategory('Semua'); return false;">
+          Lihat Semua
+          <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+        </a>
+      </div>
+      <div id="product-list" class="product-grid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #94a3b8;">
+          <i data-lucide="loader-2" class="animate-spin" style="margin: 0 auto 14px auto; width: 44px; height: 44px; display: block; animation: spin 1s linear infinite;"></i>
+          <p style="font-size: 1rem; font-weight: 500;">Sedang memuat katalog produk resmi...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bagian 4: Papan Iklan & Poster Promo (Slide Berganti) -->
+    <section id="sec-newsletter" class="layout-section">
+      <div id="promo-carousel-container" class="promo-carousel-wrapper">
+        <!-- Dirender dinamis via app.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Premium -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo">
+            <i data-lucide="shopping-bag" style="width: 22px; height: 22px;"></i>
+            <span class="shop-name-text">Deksdigital</span>
+          </a>
+          <p>Platform e-commerce resmi Deksdigital dengan sistem kemitraan no-code terintegrasi dan sistem pembayaran terintegrasi.</p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Navigasi</h4>
+          <ul class="footer-links">
+            <li><a href="/">Beranda</a></li>
+            <li><a href="/kemitraan.html">Kemitraan</a></li>
+            <li><a href="/cart.html">Keranjang</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-heading">Pembayaran</h4>
+          <div class="footer-payment" id="footer-payment-method">
+            <i data-lucide="credit-card" style="width: 18px; height: 18px; color: var(--accent-color);"></i>
+            Pembayaran Mudah
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Deksdigital Store. All Rights Reserved.</p>
+        <ul class="footer-bottom-links">
+          <li><a href="#">Kebijakan Privasi</a></li>
+          <li><a href="#">Syarat & Ketentuan</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WIDGETS -->
+
+  <!-- WhatsApp CS Widget -->
+  <a id="wa-cs-widget" href="#" target="_blank" class="wa-chat-float" style="display: none;" title="Chat WhatsApp CS">
+    <i data-lucide="message-circle" style="width: 26px; height: 26px;"></i>
+  </a>
+
+  <!-- AI Chatbot Widget -->
+  <div class="ai-chat-widget" id="ai-chat-widget">
+    <button class="ai-chat-toggle" id="ai-chat-toggle" title="Asisten Belanja AI">
+      <i data-lucide="sparkles" style="width: 26px; height: 26px;"></i>
+    </button>
+    <div class="ai-chat-box" id="ai-chat-box">
+      <div class="ai-chat-header">
+        <div class="ai-chat-profile">
+          <div class="ai-chat-avatar">AI</div>
+          <div>
+            <div class="ai-chat-title">Asisten Belanja</div>
+            <div class="ai-chat-subtitle">Online — Gemini AI</div>
+          </div>
+        </div>
+        <button class="ai-chat-close" id="ai-chat-close" title="Tutup">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+      <div class="ai-chat-messages" id="ai-messages"></div>
+      <div class="ai-chat-input-area">
+        <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Tanya produk, harga, stok...">
+        <button type="button" id="ai-send-btn" class="ai-chat-send" title="Kirim">
+          <i data-lucide="send" style="width: 15px; height: 15px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Store JavaScript -->
+  <script src="/js/app.js"></script>
+
+  <!-- Logika Khas Halaman Beranda -->
+  <script>
+    let currentCategory = 'Semua';
+    let searchQuery = '';
+
+    // Smooth scroll untuk hero button
+    document.getElementById('hero-shop-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('sec-products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    }, { passive: true });
+
+    // Newsletter handler
+    function handleNewsletter() {
+      const input = document.getElementById('newsletter-email');
+      if (input && input.value.includes('@')) {
+        showToast('🎉 Terima kasih! Anda berhasil berlangganan newsletter.');
+        input.value = '';
+      } else {
+        showToast('⚠️ Masukkan alamat email yang valid.');
+      }
+    }
+
+    // Mengambil dan Menampilkan Produk
+    async function loadProducts() {
+      const container = document.getElementById('product-list');
+      if (!container) return;
+
+      try {
+        let url = `/api/store/products?category=${currentCategory}`;
+        if (searchQuery) {
+          url += `&q=${encodeURIComponent(searchQuery)}`;
+        }
+
+        const res = await fetch(url);
+        const products = await res.json();
+        
+        // Apply layout order
+        applyLayoutOrder();
+
+        if (products.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 64px 20px; color: #94a3b8;">
+              <div style="width: 72px; height: 72px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i data-lucide="search" style="width: 30px; height: 30px; color: #cbd5e1;"></i>
+              </div>
+              <p style="font-size: 1.05rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Tidak ada produk ditemukan</p>
+              <p style="font-size: 0.88rem;">Coba ubah kata kunci atau pilih kategori lain.</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = '';
+        products.forEach(prod => {
+          const isWarning = storeSettings && storeSettings.features.stockAlert && prod.stock <= (storeSettings.stockThreshold || 5);
+          const stockHTML = isWarning 
+            ? `<span class="product-stock stock-warning">⚠ Stok ${prod.stock}</span>` 
+            : `<span class="product-stock">Stok: ${prod.stock}</span>`;
+
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          
+          const isOriginal = prod.ownerId === 'admin';
+          const badgeHTML = isOriginal 
+            ? `<span class="product-badge">Toko</span>` 
+            : `<span class="product-badge mitra">Mitra</span>`;
+          
+          const iconName = isOriginal ? 'award' : 'store';
+          const shopDisplayName = prod.shopName || (isOriginal ? 'Deksdigital Store' : 'Mitra Toko');
+
+          card.innerHTML = `
+            ${badgeHTML}
+            <a href="/product.html?id=${prod.id}" class="product-image-container">
+              <img src="${prod.imageUrl}" alt="${prod.name}" class="product-image" onerror="this.onerror=null; this.src='/uploads/default-product.jpg'">
+            </a>
+            <div class="product-info">
+              <span class="product-store">
+                <i data-lucide="${iconName}" style="width: 11px; height: 11px;"></i>
+                ${shopDisplayName}
+              </span>
+              <h3 class="product-name"><a href="/product.html?id=${prod.id}">${prod.name}</a></h3>
+              <div class="product-price-row">
+                <span class="product-price">${formatRupiah(prod.price)}</span>
+                ${stockHTML}
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Gagal memuat produk:', err);
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px 0; font-weight: 600;">Terjadi kesalahan saat memuat produk.</p>`;
+      }
+    }
+
+    // Filter Kategori
+    function filterCategory(category) {
+      currentCategory = category;
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('active');
+        const tabText = tab.textContent.trim().replace('✦ ', '');
+        const catLabel = category === 'Semua' ? 'Semua Produk' : category;
+        if (tabText === catLabel || (category === 'Semua' && tab.textContent.includes('Semua'))) {
+          tab.classList.add('active');
+        }
+      });
+      loadProducts();
+    }
+
+    // Pencarian
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      let searchTimer;
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          searchQuery = e.target.value.trim();
+          loadProducts();
+        }, 350);
+      });
+    }
+
+    // Susun Layout berdasarkan Settings
+    function applyLayoutOrder() {
+      if (!storeSettings || !storeSettings.layout) return;
+
+      const container = document.getElementById('layout-container');
+      const sections = {
+        'hero': document.getElementById('sec-hero'),
+        'categories': document.getElementById('sec-categories'),
+        'products': document.getElementById('sec-products'),
+        'newsletter': document.getElementById('sec-newsletter')
+      };
+
+      storeSettings.layout.forEach(key => {
+        const secEl = sections[key];
+        if (secEl && container) container.appendChild(secEl);
+      });
+    }
+
+    // CSS spinner keyframe inline
+    const style = document.createElement('style');
+    style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+    document.head.appendChild(style);
+
+    // Init icons
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => lucide.createIcons(), 100);
+    });
+  </script>
+</body>
+</html>

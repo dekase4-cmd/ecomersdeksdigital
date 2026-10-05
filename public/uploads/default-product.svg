@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#e2e8f0"/>
+  <rect x="50" y="80" width="300" height="200" rx="20" fill="#cbd5e1"/>
+  <circle cx="140" cy="160" r="40" fill="#94a3b8"/>
+  <polygon points="100,280 220,160 340,280" fill="#94a3b8"/>
+  <polygon points="180,280 280,190 340,280" fill="#7f8ea3"/>
+  <text x="200" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#64748b" font-weight="600">Gambar Produk</text>
+</svg>

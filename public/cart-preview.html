@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lihat Keranjang Belanja - Deksdigital Store</title>
+  <meta name="description" content="Lihat detail keranjang belanja yang dibagikan dari Deksdigital Store.">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { background: linear-gradient(135deg, #0a192f 0%, #0f172a 50%, #1e293b 100%); min-height: 100vh; }
+    .preview-wrapper {
+      max-width: 640px;
+      margin: 60px auto 40px auto;
+      padding: 0 20px;
+    }
+    .preview-brand {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .preview-brand .logo-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      border-radius: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(249,115,22,0.4);
+    }
+    .preview-brand h1 {
+      color: white; font-size: 1.5rem; font-weight: 800; margin: 0;
+    }
+    .preview-brand p {
+      color: rgba(255,255,255,0.5); font-size: 0.85rem; margin: 4px 0 0 0;
+    }
+    .preview-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+    .preview-card-header {
+      background: linear-gradient(135deg, #0a192f, #0f172a);
+      padding: 24px 28px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .preview-card-header .share-icon {
+      width: 44px; height: 44px;
+      background: rgba(249,115,22,0.2);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: #f97316;
+      flex-shrink: 0;
+    }
+    .preview-card-header h2 {
+      color: white; font-size: 1.1rem; font-weight: 700; margin: 0;
+    }
+    .preview-card-header p {
+      color: rgba(255,255,255,0.5); font-size: 0.8rem; margin: 2px 0 0 0;
+    }
+    .preview-card-body { padding: 28px; }
+    .customer-info-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .customer-info-box i { color: #64748b; width: 18px; height: 18px; }
+    .customer-info-box span { color: #1e293b; font-weight: 600; font-size: 0.9rem; }
+    .preview-items { margin-bottom: 24px; }
+    .preview-items h3 {
+      font-size: 0.85rem; font-weight: 700; color: #64748b;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin: 0 0 12px 0;
+    }
+    .preview-item-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .preview-item-row:last-child { border-bottom: none; }
+    .preview-item-img {
+      width: 52px; height: 52px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #f1f5f9;
+      flex-shrink: 0;
+    }
+    .preview-item-info { flex: 1; }
+    .preview-item-name {
+      font-size: 0.9rem; font-weight: 600; color: #1e293b;
+      margin: 0 0 2px 0;
+    }
+    .preview-item-qty {
+      font-size: 0.78rem; color: #64748b;
+    }
+    .preview-item-subtotal {
+      font-size: 0.9rem; font-weight: 700; color: #0a192f;
+    }
+    .preview-total-box {
+      background: linear-gradient(135deg, #0a192f, #0f172a);
+      border-radius: 14px;
+      padding: 18px 22px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px;
+    }
+    .preview-total-box span { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    .preview-total-box .total-value {
+      color: #f97316; font-size: 1.5rem; font-weight: 800;
+    }
+    .preview-status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem; font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .preview-status-badge.pending { background: #fef3c7; color: #d97706; }
+    .preview-status-badge.verified { background: #dcfce7; color: #15803d; }
+    .preview-status-badge.waiting { background: #dbeafe; color: #1d4ed8; }
+    .preview-cta-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(249,115,22,0.35);
+    }
+    .preview-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(249,115,22,0.5);
+    }
+    .preview-footer {
+      text-align: center;
+      margin-top: 24px;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.78rem;
+    }
+    .loader-box {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .loader-box p { color: rgba(255,255,255,0.6); margin-top: 12px; }
+    .error-box {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+    }
+    .error-box p { color: #b91c1c; font-weight: 600; margin: 0 0 12px 0; }
+    .upload-drop-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px; padding: 20px; text-align: center;
+      cursor: pointer; transition: all 0.2s; background: #f8fafc;
+      margin-bottom: 12px;
+    }
+    .upload-drop-zone:hover, .upload-drop-zone.drag-over {
+      border-color: #f97316; background: #fff7ed;
+    }
+    .upload-drop-zone i { color: #94a3b8; }
+    .upload-drop-zone p { font-size: 0.8rem; color: #64748b; margin: 4px 0 0 0; }
+    #preview-bukti-preview-img {
+      max-width: 100%; max-height: 180px; border-radius: 8px;
+      margin-top: 10px; display: none; object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="preview-wrapper">
+    <!-- Brand Header -->
+    <div class="preview-brand">
+      <div class="logo-icon">
+        <i data-lucide="shopping-bag" style="width:28px; height:28px; color:white;"></i>
+      </div>
+      <h1 id="brand-name">Deksdigital Store</h1>
+      <p>Keranjang Belanja Dibagikan</p>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader-box" id="preview-loader">
+      <i data-lucide="loader-2" style="width:40px;height:40px;color:rgba(255,255,255,0.5);animation:spin 1s linear infinite;"></i>
+      <p>Memuat data keranjang belanja...</p>
+    </div>
+
+    <!-- Error Box -->
+    <div style="display:none;" id="preview-error">
+      <div class="error-box">
+        <i data-lucide="alert-circle" style="width:32px;height:32px;color:#b91c1c;margin:0 auto 12px auto;display:block;"></i>
+        <p>Link keranjang tidak valid atau sudah kadaluarsa.</p>
+        <a href="/" style="color:#f97316; font-weight:600; text-decoration:none;">← Kembali ke Toko</a>
+      </div>
+    </div>
+
+    <!-- Preview Card -->
+    <div class="preview-card" id="preview-card" style="display:none;">
+      <div class="preview-card-header">
+        <div class="share-icon">
+          <i data-lucide="share-2" style="width:22px;height:22px;"></i>
+        </div>
+        <div>
+          <h2>Keranjang Dibagikan</h2>
+          <p id="preview-order-id">INV-XXXXXXXX-0000</p>
+        </div>
+      </div>
+
+      <div class="preview-card-body">
+        <!-- Pemesan Info -->
+        <div class="customer-info-box">
+          <i data-lucide="user"></i>
+          <span>Dipesan oleh: <span id="preview-customer-name">—</span></span>
+        </div>
+
+        <!-- Status Badge -->
+        <div id="preview-status-container"></div>
+
+        <!-- Daftar Item -->
+        <div class="preview-items">
+          <h3>Daftar Produk</h3>
+          <div id="preview-items-list">
+            <!-- Render dinamis -->
+          </div>
+        </div>
+
+        <!-- Total -->
+        <div class="preview-total-box">
+          <span>Total Pembayaran</span>
+          <span class="total-value" id="preview-total">Rp 0</span>
+        </div>
+
+        <!-- Section QRIS Pembayaran (jika belum bayar) -->
+        <div id="preview-payment-section" style="display:none; border-top:1px solid #e2e8f0; padding-top:24px; margin-top:24px; margin-bottom:24px;">
+          <div style="text-align:center; margin-bottom:18px;">
+            <h2 style="font-size:1.1rem; font-weight:800; color:#0a192f; margin:0;">Pembayaran via WhatsApp Admin</h2>
+            <p style="font-size:0.82rem; color:#64748b; margin-top:4px;">Silakan unggah bukti transfer atau langsung hubungi Admin untuk penyelesaian transaksi.</p>
+          </div>
+
+          <!-- Upload Bukti -->
+          <div id="preview-upload-section" style="border-top:1px solid #f1f5f9; padding-top:16px;">
+            <h4 style="font-weight:700; color:#0a192f; margin:0 0 10px 0; font-size:0.85rem;">📎 Unggah Screenshot Bukti Transfer</h4>
+            <div class="upload-drop-zone" id="preview-upload-drop-zone" onclick="document.getElementById('preview-bukti-file-input').click()">
+              <i data-lucide="image-plus" style="width:24px; height:24px; color:#94a3b8; display:block; margin:0 auto 6px;"></i>
+              <p>Klik untuk pilih file screenshot bukti transfer</p>
+              <img id="preview-bukti-preview-img" alt="Preview bukti" style="max-width:100%; max-height:180px; border-radius:8px; margin-top:10px; display:none; object-fit:cover;">
+            </div>
+            <input type="file" id="preview-bukti-file-input" accept="image/*" style="display:none;" onchange="onPreviewBuktiFileSelected()">
+
+            <button class="preview-cta-btn" id="preview-upload-submit-btn" onclick="submitPreviewBuktiTransfer()" style="margin-top:14px; opacity:0.5; pointer-events:none;">
+              <i data-lucide="upload-cloud" style="width:16px; height:16px; display:inline-block; vertical-align:middle; margin-right:6px;"></i>
+              Kirim Bukti & Dapatkan Struk
+            </button>
+          </div>
+        </div>
+
+        <!-- Section Sukses setelah Upload -->
+        <div id="preview-success-section" style="display:none; text-align:center; padding:24px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:16px; margin-top:24px; margin-bottom:24px;">
+          <div style="width:48px; height:48px; background:#22c55e; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px auto;">
+            <i data-lucide="check" style="width:24px; height:24px; color:white;"></i>
+          </div>
+          <h3 style="color:#15803d; font-size:1.05rem; font-weight:800; margin:0 0 4px 0;">Bukti Transfer Terkirim! 🎉</h3>
+          <p style="color:#166534; font-size:0.82rem; margin:0 0 16px 0;">Pembayaran sedang menunggu verifikasi oleh admin.</p>
+          
+          <!-- Tombol WA -->
+          <button onclick="openPreviewWhatsAppConfirmation()" style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:14px; background:linear-gradient(135deg, #25D366, #128C7E); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; margin-bottom:12px; font-size:0.9rem; box-shadow:0 6px 16px rgba(37,211,102,0.25);">
+            <i data-lucide="phone" style="width:18px; height:18px;"></i>
+            Lanjutkan ke WhatsApp Admin
+          </button>
+
+          <a id="preview-view-receipt-btn" href="#" style="color:#64748b; font-size:0.8rem; text-decoration:none; display:inline-block; font-weight:600;">
+            <i data-lucide="file-text" style="width:14px; height:14px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> Lihat Struk Digital Saya
+          </a>
+        </div>
+
+        <!-- Tanggal -->
+        <p style="font-size:0.78rem; color:#94a3b8; margin-bottom:20px; text-align:center;">
+          <i data-lucide="clock" style="width:13px;height:13px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>
+          Dibuat pada: <span id="preview-date">—</span>
+        </p>
+
+        <!-- CTA Button -->
+        <a href="/" class="preview-cta-btn">
+          <i data-lucide="shopping-cart" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:8px;"></i>
+          Mulai Belanja di Toko
+        </a>
+      </div>
+    </div>
+
+    <div class="preview-footer">
+      Link keranjang ini bersifat publik dan bisa dilihat siapapun.<br>
+      © 2026 Deksdigital Store
+    </div>
+  </div>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <script>
+    const token = new URLSearchParams(window.location.search).get('token');
+
+    function formatRupiah(n) {
+      return 'Rp ' + parseInt(n).toLocaleString('id-ID');
+    }
+
+    function getStatusBadge(statusManual) {
+      const map = {
+        'belum_upload': { cls: 'pending', icon: 'clock', label: 'Menunggu Pembayaran' },
+        'menunggu_verifikasi': { cls: 'waiting', icon: 'hourglass', label: 'Menunggu Verifikasi Admin' },
+        'terverifikasi': { cls: 'verified', icon: 'check-circle', label: 'Pembayaran Terverifikasi' },
+        'ditolak': { cls: 'error', icon: 'x-circle', label: 'Pembayaran Ditolak' }
+      };
+      const s = map[statusManual] || map['belum_upload'];
+      return `<div class="preview-status-badge ${s.cls}"><i data-lucide="${s.icon}" style="width:13px;height:13px;"></i> ${s.label}</div>`;
+    }
+
+    let activePreviewData = null;
+    let activeSettings = null;
+
+    async function loadPreview() {
+      if (!token) {
+        document.getElementById('preview-loader').style.display = 'none';
+        document.getElementById('preview-error').style.display = 'block';
+        lucide.createIcons();
+        return;
+      }
+
+      try {
+        // Load toko settings untuk nama brand & QRIS
+        const settRes = await fetch('/api/store/settings');
+        const settings = await settRes.json();
+        activeSettings = settings;
+        if (settings.shopName) {
+          document.getElementById('brand-name').textContent = settings.shopName;
+        }
+
+        // Load preview data
+        const res = await fetch(`/api/store/cart-preview/${token}`);
+        if (!res.ok) throw new Error('Not found');
+        const data = await res.json();
+        activePreviewData = data;
+
+        // Populate data
+        document.getElementById('preview-order-id').textContent = data.orderId;
+        document.getElementById('preview-customer-name').textContent = data.customer.name || '—';
+        document.getElementById('preview-total').textContent = formatRupiah(data.total);
+        document.getElementById('preview-status-container').innerHTML = getStatusBadge(data.statusPembayaranManual);
+
+        const dateObj = new Date(data.createdAt);
+        document.getElementById('preview-date').textContent = dateObj.toLocaleDateString('id-ID', {
+          year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        // Render items
+        const itemsList = document.getElementById('preview-items-list');
+        itemsList.innerHTML = '';
+        data.items.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'preview-item-row';
+          row.innerHTML = `
+            <img src="${item.imageUrl || '/uploads/default-product.jpg'}" alt="${item.name}" class="preview-item-img"
+              onerror="this.onerror=null; this.src='/uploads/default-product.jpg'">
+            <div class="preview-item-info">
+              <p class="preview-item-name">${item.name}</p>
+              <span class="preview-item-qty">${item.qty}x · ${formatRupiah(item.price)}</span>
+            </div>
+            <span class="preview-item-subtotal">${formatRupiah(item.subtotal)}</span>
+          `;
+          itemsList.appendChild(row);
+        });
+
+        // Render QRIS Payment & Upload Bukti or Success screens
+        const paymentSection = document.getElementById('preview-payment-section');
+        const successSection = document.getElementById('preview-success-section');
+
+        if (data.statusPembayaranManual === 'belum_upload') {
+          paymentSection.style.display = 'block';
+          successSection.style.display = 'none';
+
+          // Set QRIS barcode & details
+          const qris = settings.qris || {};
+          document.getElementById('preview-qris-merchant').textContent = qris.merchantName || 'DEKSDIGITAL PAY';
+          document.getElementById('preview-qris-nmid').textContent = 'NMID: ' + (qris.nmid || 'ID102030405060');
+          document.getElementById('preview-qris-img').src = qris.qrisImage || '/uploads/default-qris.png';
+
+          // Render instructions
+          const instructionsList = document.getElementById('preview-qris-instructions-list');
+          instructionsList.innerHTML = '';
+          const steps = qris.instructions || [];
+          steps.forEach(step => {
+            const li = document.createElement('li');
+            li.textContent = step;
+            instructionsList.appendChild(li);
+          });
+        } else if (data.statusPembayaranManual === 'menunggu_verifikasi') {
+          paymentSection.style.display = 'none';
+          successSection.style.display = 'block';
+          document.getElementById('preview-view-receipt-btn').href = `/receipt.html?orderId=${data.orderId}`;
+        } else {
+          // terverifikasi / ditolak
+          paymentSection.style.display = 'none';
+          successSection.style.display = 'none';
+        }
+
+        // Show card
+        document.getElementById('preview-loader').style.display = 'none';
+        document.getElementById('preview-card').style.display = 'block';
+
+        // Update document title
+        document.title = `Keranjang ${data.customer.name} — ${settings.shopName || 'Deksdigital Store'}`;
+
+        lucide.createIcons();
+      } catch (err) {
+        document.getElementById('preview-loader').style.display = 'none';
+        document.getElementById('preview-error').style.display = 'block';
+        lucide.createIcons();
+      }
+    }
+
+    // ─── File Selection & Preview ──────────────────────────────────────────
+    function onPreviewBuktiFileSelected() {
+      const file = document.getElementById('preview-bukti-file-input').files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.getElementById('preview-bukti-preview-img');
+        img.src = e.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+
+      // Enable submit button
+      const btn = document.getElementById('preview-upload-submit-btn');
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    }
+
+    // ─── Submit Bukti Pembayaran dari Shareable Link ────────────────────────
+    async function submitPreviewBuktiTransfer() {
+      if (!activePreviewData) return;
+
+      const fileInput = document.getElementById('preview-bukti-file-input');
+      if (!fileInput.files || fileInput.files.length === 0) {
+        alert('Mohon pilih file screenshot bukti transfer terlebih dahulu.');
+        return;
+      }
+
+      const btn = document.getElementById('preview-upload-submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader-2" style="width:16px;height:16px;animation:spin 1s linear infinite;"></i> Mengirim...';
+      lucide.createIcons();
+
+      const formData = new FormData();
+      formData.append('buktiTransfer', fileInput.files[0]);
+
+      try {
+        const res = await fetch(`/api/store/upload-bukti/${activePreviewData.orderId}`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const resData = await res.json();
+
+        if (!res.ok) {
+          alert(resData.error || 'Gagal mengirim bukti transfer.');
+          btn.disabled = false;
+          btn.innerHTML = '<i data-lucide="upload-cloud" style="width:16px;height:16px;"></i> Kirim Bukti & Dapatkan Struk';
+          lucide.createIcons();
+          return;
+        }
+
+        // Sukses! Tampilkan layar sukses
+        document.getElementById('preview-payment-section').style.display = 'none';
+        document.getElementById('preview-success-section').style.display = 'block';
+        document.getElementById('preview-view-receipt-btn').href = `/receipt.html?orderId=${activePreviewData.orderId}`;
+        
+        // Update status badge
+        activePreviewData.statusPembayaranManual = 'menunggu_verifikasi';
+        document.getElementById('preview-status-container').innerHTML = getStatusBadge('menunggu_verifikasi');
+
+        lucide.createIcons();
+        alert('Bukti transfer berhasil dikirim!');
+      } catch (err) {
+        alert('Koneksi bermasalah. Gagal mengirim bukti transfer.');
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="upload-cloud" style="width:16px;height:16px;"></i> Kirim Bukti & Dapatkan Struk';
+        lucide.createIcons();
+      }
+    }
+
+    // ─── WA Redirect & Confirmation dari Shareable Link ──────────────────────
+    function openPreviewWhatsAppConfirmation() {
+      if (!activePreviewData) return;
+
+      const order = activePreviewData;
+      const orderId = order.orderId;
+      const targetWhatsapp = order.targetWhatsapp;
+      const totalText = formatRupiah(order.total);
+      const receiptLink = window.location.origin + `/receipt.html?orderId=${orderId}`;
+      
+      let itemsText = '';
+      order.items.forEach(item => {
+        itemsText += `- ${item.name} (${item.qty}x) = ${formatRupiah(item.price * item.qty)}\n`;
+      });
+
+      // Default Template
+      const template = order.invoiceTemplate || 
+        'Halo Admin, saya ingin mengonfirmasi pembayaran untuk pesanan *{orderId}*.\n\nTotal: {total}\nLink Struk: {receiptLink}';
+      
+      let waMessage = template
+        .replace('{orderId}', orderId)
+        .replace('{items}', itemsText.trim())
+        .replace('{total}', totalText)
+        .replace('{name}', order.customer.name)
+        .replace('{phone}', order.customer.phone || '')
+        .replace('{address}', order.customer.address || '')
+        .replace('{receiptLink}', receiptLink);
+
+      const encodedMessage = encodeURIComponent(waMessage);
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetWhatsapp}&text=${encodedMessage}`;
+
+      window.open(whatsappUrl, '_blank');
+      
+      // Redirect ke receipt.html
+      window.location.href = `/receipt.html?orderId=${orderId}`;
+    }
+
+    // Drag-and-drop support
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const dropZone = document.getElementById('preview-upload-drop-zone');
+        if (dropZone) {
+          dropZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+          });
+          dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+          dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+              document.getElementById('preview-bukti-file-input').files = e.dataTransfer.files;
+              onPreviewBuktiFileSelected();
+            }
+          });
+        }
+      }, 800);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      loadPreview();
+    });
+  </script>
+</body>
+</html>

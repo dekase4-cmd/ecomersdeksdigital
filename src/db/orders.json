@@ -1,0 +1,295 @@
+[
+  {
+    "orderId": "INV-20260620-7568",
+    "customer": {
+      "name": "Pembeli Test",
+      "phone": "081111111111",
+      "address": "Jl. Test No.1"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_001",
+        "name": "Mouse Wireless Deksdigital Premium",
+        "qty": 1,
+        "price": 75000,
+        "originalPrice": 75000,
+        "subtotal": 75000,
+        "ownerId": "admin"
+      }
+    ],
+    "total": 75000,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital Store",
+    "status": "Menunggu Pembayaran",
+    "createdAt": "2026-06-20T08:27:40.989Z"
+  },
+  {
+    "orderId": "INV-20260620-7509",
+    "customer": {
+      "name": "Test Mitra Buyer",
+      "phone": "089999999999",
+      "address": "Jl. Mitra Beli 1"
+    },
+    "items": [
+      {
+        "productId": "prod_mitra_1781943946122",
+        "name": "Produk Test Mitra",
+        "qty": 2,
+        "price": 157500,
+        "originalPrice": 150000,
+        "subtotal": 315000,
+        "ownerId": "mitra_1781943915504"
+      }
+    ],
+    "total": 315000,
+    "adminFees": 15000,
+    "targetWhatsapp": "081234567890",
+    "targetName": "Toko Mitra Test",
+    "status": "Selesai",
+    "createdAt": "2026-06-20T08:27:41.282Z"
+  },
+  {
+    "orderId": "INV-20260620-6785",
+    "customer": {
+      "name": "df",
+      "phone": "085467644",
+      "address": "xgfhhghg"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_002",
+        "name": "Keyboard Mechanical Deksdigital RGB",
+        "qty": 1,
+        "price": 250000,
+        "originalPrice": 250000,
+        "subtotal": 250000,
+        "ownerId": "admin"
+      }
+    ],
+    "total": 250000,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital Store",
+    "status": "Menunggu Pembayaran",
+    "createdAt": "2026-06-20T09:01:20.883Z"
+  },
+  {
+    "orderId": "INV-20260710-1490",
+    "customer": {
+      "name": "asep",
+      "phone": "038274827",
+      "address": "desa apa aja"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_001",
+        "name": "Mouse Wireless Deksdigital Premium",
+        "qty": 1,
+        "price": 75000,
+        "originalPrice": 75000,
+        "subtotal": 75000,
+        "ownerId": "admin"
+      }
+    ],
+    "total": 75000,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital Store",
+    "status": "Menunggu Pembayaran",
+    "createdAt": "2026-07-10T10:00:13.707Z"
+  },
+  {
+    "orderId": "INV-20260718-5557",
+    "shareToken": "73474adf-c439-47a9-af49-a0d0435e881d",
+    "buktiTransferUrl": null,
+    "statusPembayaranManual": "belum_upload",
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "customer": {
+      "name": "deka sukoco",
+      "phone": "0384357",
+      "address": "eutehfdf"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_001",
+        "name": "Mouse Wireless Deksdigital Premium",
+        "qty": 1,
+        "price": 75000,
+        "originalPrice": 75000,
+        "subtotal": 75000,
+        "ownerId": "admin"
+      }
+    ],
+    "total": 75000,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital Store",
+    "status": "Dikirim",
+    "createdAt": "2026-07-18T13:49:39.819Z"
+  },
+  {
+    "orderId": "INV-20260718-5370",
+    "shareToken": "894fe536-45d0-4f9c-bbc1-2db1f6a49193",
+    "buktiTransferUrl": "/uploads/bukti_INV-20260718-5370_1784383404694.jpeg",
+    "statusPembayaranManual": "terverifikasi",
+    "verifiedAt": "2026-07-19T14:00:44.273Z",
+    "verifiedBy": "admin",
+    "customer": {
+      "name": "deka sukoco",
+      "phone": "2084723436",
+      "address": "desa kenari"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_001",
+        "name": "Mouse Wireless Deksdigital Premium",
+        "qty": 1,
+        "price": 75000,
+        "originalPrice": 75000,
+        "subtotal": 75000,
+        "ownerId": "admin"
+      }
+    ],
+    "total": 75000,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital Store",
+    "status": "Selesai",
+    "createdAt": "2026-07-18T14:02:43.041Z",
+    "uploadedAt": "2026-07-18T14:03:24.726Z"
+  },
+  {
+    "orderId": "INV-20260817-1854",
+    "shareToken": "17925486-861d-4772-9579-a84579332949",
+    "buktiTransferUrl": null,
+    "statusPembayaranManual": "belum_upload",
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "customer": {
+      "name": "Test Pembeli",
+      "phone": "08123456789",
+      "address": "Jl. Testing No. 1 Jakarta"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_001",
+        "name": "Mouse Wireless Deksdigital Premium",
+        "qty": 1,
+        "price": 75000,
+        "originalPrice": 75000,
+        "subtotal": 75000,
+        "ownerId": "admin"
+      }
+    ],
+    "subtotal": 75000,
+    "discountCode": "DEKSDIGITAL",
+    "discountAmount": 7500,
+    "total": 67500,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital",
+    "status": "Menunggu Pembayaran",
+    "createdAt": "2026-08-17T10:25:15.306Z"
+  },
+  {
+    "orderId": "INV-20260817-1312",
+    "shareToken": "cc56ba44-cca9-44b7-aa1f-006b55c70b46",
+    "buktiTransferUrl": null,
+    "statusPembayaranManual": "belum_upload",
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "customer": {
+      "name": "deka",
+      "phone": "083891652153",
+      "address": "pamijahan"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_001",
+        "name": "Mouse Wireless Deksdigital Premium",
+        "qty": 1,
+        "price": 75000,
+        "originalPrice": 75000,
+        "subtotal": 75000,
+        "ownerId": "admin"
+      }
+    ],
+    "subtotal": 75000,
+    "discountCode": "DISKON50K",
+    "discountAmount": 50000,
+    "total": 25000,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital",
+    "status": "Selesai",
+    "createdAt": "2026-08-17T10:27:49.882Z"
+  },
+  {
+    "orderId": "INV-20261004-9908",
+    "shareToken": "d83eb2fc-6ed4-4b31-b778-023815b24cd8",
+    "buktiTransferUrl": null,
+    "statusPembayaranManual": "belum_upload",
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "customer": {
+      "name": "dk",
+      "phone": "083891652153",
+      "address": "bogor"
+    },
+    "items": [
+      {
+        "productId": "prod_deks_001",
+        "name": "canva premium",
+        "qty": 2,
+        "price": 75000,
+        "originalPrice": 75000,
+        "subtotal": 150000,
+        "ownerId": "admin"
+      }
+    ],
+    "subtotal": 150000,
+    "discountCode": null,
+    "discountAmount": 0,
+    "total": 150000,
+    "adminFees": 0,
+    "targetWhatsapp": "628123456789",
+    "targetName": "Deksdigital",
+    "status": "Selesai",
+    "createdAt": "2026-10-04T08:40:28.073Z"
+  },
+  {
+    "orderId": "INV-20261005-8451",
+    "shareToken": "0e278203-6478-4226-a098-2ce2aa191755",
+    "buktiTransferUrl": null,
+    "statusPembayaranManual": "belum_upload",
+    "verifiedAt": null,
+    "verifiedBy": null,
+    "customer": {
+      "name": "sd",
+      "phone": "64676868979",
+      "address": "vgor"
+    },
+    "items": [
+      {
+        "productId": "prod_mitra_001",
+        "name": "Sepatu Sneakers Casual Sport",
+        "qty": 1,
+        "price": 150000,
+        "originalPrice": 150000,
+        "subtotal": 150000,
+        "ownerId": "mitra1"
+      }
+    ],
+    "subtotal": 150000,
+    "discountCode": null,
+    "discountAmount": 0,
+    "total": 150000,
+    "adminFees": 7500,
+    "targetWhatsapp": "628987654321",
+    "targetName": "Toko Sepatu Mitra",
+    "status": "Selesai",
+    "createdAt": "2026-10-05T02:22:17.935Z"
+  }
+]

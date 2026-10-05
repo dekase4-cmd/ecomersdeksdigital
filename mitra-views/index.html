@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mitra Panel - Deksdigital E-Commerce</title>
+  <!-- Mitra CSS -->
+  <link rel="stylesheet" href="/mitra-dashboard/css/mitra.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="admin-header">
+    <div class="admin-title">
+      <i data-lucide="store" style="color: var(--accent-color);"></i>
+      Deksdigital Kemitraan Panel <span id="mitra-top-badge" style="background-color: #22c55e;">Mitra Active</span>
+    </div>
+    <div class="admin-user-info">
+      <span style="font-weight: 600;"><i data-lucide="store" style="width: 14px; height: 14px; display:inline-block; vertical-align:middle; margin-right:5px;"></i>Toko: <span id="r-top-shopname">Toko Mitra</span></span>
+      <button class="logout-link" onclick="handleLogout()">Keluar</button>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <button class="sidebar-tab-btn active" onclick="switchTab('tab-stats')">
+        <i data-lucide="bar-chart-2"></i> Ringkasan Toko
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-profile')">
+        <i data-lucide="user-cog"></i> Profil & Kemitraan
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-products')">
+        <i data-lucide="package"></i> Kelola Produk
+      </button>
+      <button class="sidebar-tab-btn" onclick="switchTab('tab-orders')">
+        <i data-lucide="shopping-bag"></i> Pesanan Masuk
+      </button>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main-content">
+      
+      <!-- ==========================================
+           TAB 1: RINGKASAN TOKO (STATISTIK)
+           ========================================== -->
+      <section id="tab-stats" class="panel-section active">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Ringkasan Toko Kemitraan</h1>
+          <p class="panel-subtitle">Pantau performa penjualan produk Anda dan jumlah order masuk.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-info">
+              <h3>Volume Penjualan Kotor</h3>
+              <p id="stat-sales-gross">Rp 0</p>
+            </div>
+            <div class="stat-icon"><i data-lucide="dollar-sign"></i></div>
+          </div>
+          
+          <div class="stat-card green">
+            <div class="stat-info">
+              <h3>Jumlah Produk Aktif</h3>
+              <p id="stat-products-count">0 Produk</p>
+            </div>
+            <div class="stat-icon"><i data-lucide="package"></i></div>
+          </div>
+
+          <div class="stat-card purple">
+            <div class="stat-info">
+              <h3>Total Transaksi Pesanan</h3>
+              <p id="stat-orders-count">0 Order</p>
+            </div>
+            <div class="stat-icon"><i data-lucide="shopping-cart"></i></div>
+          </div>
+        </div>
+
+        <div style="background:white; border: 1px solid var(--border-color); border-radius:16px; padding:25px; box-shadow:var(--shadow-sm);">
+          <h3 style="font-weight:700; color:var(--primary-color); margin-bottom:10px;"><i data-lucide="info" style="width:16px; height:16px; display:inline-block; vertical-align:middle; margin-right:4px;"></i>Informasi Pembagian Hasil Pembayaran:</h3>
+          <p style="font-size:0.9rem; color:#64748b; line-height:1.6;">Seluruh pesanan produk kemitraan Anda akan dibayar oleh pembeli via QRIS. Pembeli membayar harga produk sesuai dengan harga yang Anda tetapkan. Sesuai kesepakatan persentase komisi mitra, biaya layanan admin platform (komisi) akan dipotong secara otomatis dari hasil penjualan produk Anda. Pendapatan bersih Anda adalah harga produk dikurangi persentase komisi tersebut.</p>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 2: PROFIL & KEMITRAAN (EDIT PROFIL)
+           ========================================== -->
+      <section id="tab-profile" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Profil & Kemitraan</h1>
+          <p class="panel-subtitle">Sunting nama toko, nomor WhatsApp tujuan pembeli, dan besaran komisi admin platform.</p>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h2 class="settings-card-title"><i data-lucide="store"></i> Informasi Toko & Kemitraan</h2>
+            <form id="mitra-profile-form" onsubmit="saveMitraProfile(event)">
+              <div class="form-group">
+                <label>Nama Toko Mitra</label>
+                <input type="text" id="m-shopname-input" class="form-control" placeholder="Nama toko yang tampil di storefront..." required>
+              </div>
+              <div class="form-group">
+                <label>Nomor WhatsApp Penerima Order (Kode negara, cth: 62898...)</label>
+                <input type="text" id="m-whatsapp-input" class="form-control" placeholder="Pembeli akan mengonfirmasi bukti bayar ke nomor ini..." required>
+              </div>
+              <div class="form-group">
+                <label>Biaya Layanan Admin untuk Pemilik Platform (%)</label>
+                <input type="number" id="m-fee-input" class="form-control" min="5" max="50" step="0.5" required>
+                <span style="font-size:0.75rem; color:#64748b; display:block; margin-top:4px;">Persentase keuntungan untuk admin pemilik platform (Deksdigital) dari setiap produk Anda yang terjual (minimal 5%).</span>
+              </div>
+              <button type="submit" class="btn-admin primary" style="width:100%; justify-content:center; padding:12px;">
+                Simpan Profil Toko
+              </button>
+            </form>
+          </div>
+
+          <div class="settings-card" style="display:flex; flex-direction:column; justify-content:space-between; background-color: #faf5ff; border-color: #e9d5ff;">
+            <div>
+              <h2 class="settings-card-title" style="color:#7c3aed; border-bottom-color:#f3e8ff;"><i data-lucide="sparkles" style="color:#7c3aed;"></i> Skema Kemitraan Aktif</h2>
+              <div style="font-size:0.9rem; color:#581c87; line-height:1.6;">
+                <p style="margin-bottom:10px;">Status Kemitraan Anda saat ini: <strong style="background-color:#f3e8ff; padding:2px 8px; border-radius:10px; font-size:0.8rem;">TERVERIFIKASI</strong></p>
+                <p>Setiap produk yang Anda jual di katalog kemitraan akan otomatis dimuat di landing page **`/kemitraan.html`**.</p>
+                <p style="margin-top:10px;">Silakan pastikan nomor WhatsApp yang Anda masukkan aktif untuk menerima kiriman berkas struk pembelian dan tangkapan layar (screenshot) bukti transfer QRIS dari calon pembeli.</p>
+              </div>
+            </div>
+            <div style="text-align:center; padding-top:20px;">
+              <i data-lucide="store" style="width:70px; height:70px; color:#c084fc; opacity:0.8;"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 3: KELOLA PRODUK (CRUD MITRA)
+           ========================================== -->
+      <section id="tab-products" class="panel-section">
+        <div class="panel-title-header" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <h1 class="panel-title">Kelola Produk Kemitraan</h1>
+            <p class="panel-subtitle">Kelola katalog barang dagangan yang ingin Anda pasarkan di halaman kemitraan.</p>
+          </div>
+          <button class="btn-admin primary" onclick="openAddProductModal()">
+            <i data-lucide="plus-circle"></i> Tambah Produk Baru
+          </button>
+        </div>
+
+        <div class="table-card">
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Gambar</th>
+                  <th>Nama Produk</th>
+                  <th>Kategori</th>
+                  <th style="text-align: right;">Harga Jual Storefront</th>
+                  <th style="text-align: right;">Estimasi Pendapatan Bersih</th>
+                  <th style="text-align: center;">Stok</th>
+                  <th style="text-align: center;">Status</th>
+                  <th style="text-align: right;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="mitra-products-list">
+                <!-- Dimuat dinamis -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 4: PESANAN MASUK (ORDERS MONITOR)
+           ========================================== -->
+      <section id="tab-orders" class="panel-section">
+        <div class="panel-title-header">
+          <h1 class="panel-title">Pesanan Masuk</h1>
+          <p class="panel-subtitle">Lihat histori transaksi belanja pembeli khusus untuk barang-barang milik toko Anda.</p>
+        </div>
+
+        <div class="table-card">
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>No. Invoice</th>
+                  <th>Tanggal</th>
+                  <th>Nama Pembeli</th>
+                  <th>Produk Anda</th>
+                  <th style="text-align: right;">Subtotal Anda</th>
+                  <th style="text-align: center;">Status</th>
+                  <th style="text-align: right;">Cetak Struk</th>
+                </tr>
+              </thead>
+              <tbody id="mitra-orders-list">
+                <!-- Dimuat dinamis -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==========================================
+       MODAL DIALOG CRUD PRODUK MITRA
+       ========================================== -->
+  <div class="modal-overlay" id="product-modal" style="display:none; align-items:center; justify-content:center; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15, 23, 42, 0.7); z-index:9999;">
+    <div class="modal-card" style="max-width: 600px; max-height:90vh; overflow-y:auto; border-radius:16px;">
+      <button class="close-modal" onclick="closeProductModal()">&times;</button>
+      <h2 id="modal-product-title" style="font-size:1.3rem; font-weight:800; color:var(--primary-color); margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        Tambah Produk Kemitraan
+      </h2>
+      
+      <form id="product-crud-form" onsubmit="saveProductSubmit(event)">
+        <input type="hidden" id="p-id-field">
+        
+        <div class="form-group">
+          <label>Nama Produk</label>
+          <input type="text" id="p-name-field" class="form-control" placeholder="Contoh: Sepatu Sneakers Running..." required>
+        </div>
+
+        <div class="settings-grid" style="gap:15px; margin-bottom:15px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Kategori</label>
+            <select id="p-category-field" class="form-control" style="height:45px;">
+              <option value="Fashion">Fashion</option>
+              <option value="Elektronik">Elektronik</option>
+              <option value="Aksesoris">Aksesoris</option>
+              <option value="Umum">Umum</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Status Tampilan</label>
+            <select id="p-status-field" class="form-control" style="height:45px;">
+              <option value="aktif">Aktif (Tampil)</option>
+              <option value="nonaktif">Nonaktif (Sembunyi)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-grid" style="gap:15px; margin-bottom:15px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Harga Jual Storefront (Rupiah)</label>
+            <input type="number" id="p-price-field" class="form-control" placeholder="Contoh: 100000" oninput="calculateStorefrontPricePreview()" required>
+            <span style="font-size:0.75rem; color:#64748b; display:block; margin-top:4px;">Harga jual produk yang akan tampil di storefront pembeli.</span>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Stok Barang</label>
+            <input type="number" id="p-stock-field" class="form-control" placeholder="Contoh: 20" required>
+          </div>
+        </div>
+
+        <!-- Preview Harga Storefront -->
+        <div style="background-color:#f0fdf4; border:1px solid #bbf7d0; padding:10px 15px; border-radius:10px; margin-bottom:15px; font-weight:700; color:#15803d; font-size:0.85rem;">
+          Estimasi Pendapatan Bersih Anda (Dipotong Komisi <span id="m-preview-fee-label">5</span>%): <span id="m-preview-final-price">Rp 0</span>
+        </div>
+
+        <div class="form-group">
+          <label>Deskripsi Produk</label>
+          <textarea id="p-desc-field" class="form-control" rows="4" placeholder="Jelaskan bahan, ukuran, dan kelebihan barang..." required></textarea>
+          <button type="button" class="btn-ai-sparkle" onclick="generateDescriptionAI()">
+            <i data-lucide="sparkles" style="width:14px; height:14px;"></i> Tulis Deskripsi dengan AI Gemini
+          </button>
+        </div>
+
+        <!-- Pilihan Jenis Pengiriman & Detil Berat/Asal -->
+        <div class="settings-grid" style="gap:15px; margin-bottom:15px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Jenis Pengiriman</label>
+            <select id="p-delivery-type-field" class="form-control" style="height:45px;" onchange="toggleShippingFields()">
+              <option value="digital">Digital (Download / Konten)</option>
+              <option value="fisik">Fisik (Dikirim via Kurir)</option>
+              <option value="pickup">Ambil Sendiri (Pickup)</option>
+            </select>
+          </div>
+          <div class="form-group" id="p-weight-group" style="margin-bottom:0; display:none;">
+            <label>Berat Produk (Gram)</label>
+            <input type="number" id="p-weight-field" class="form-control" placeholder="Contoh: 500" value="0">
+          </div>
+        </div>
+
+        <div class="settings-grid" id="p-shipping-origin-group" style="gap:15px; margin-bottom:15px; display:none;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Kota Asal Pengiriman</label>
+            <select id="p-origin-city-field" class="form-control" style="height:45px;">
+              <option value="Jakarta">Jakarta</option>
+              <option value="Bandung">Bandung</option>
+              <option value="Bekasi">Bekasi</option>
+              <option value="Bogor">Bogor</option>
+              <option value="Depok">Depok</option>
+              <option value="Semarang">Semarang</option>
+              <option value="Surakarta">Surakarta</option>
+              <option value="Surabaya">Surabaya</option>
+              <option value="Malang">Malang</option>
+              <option value="Yogyakarta">Yogyakarta</option>
+              <option value="Tangerang">Tangerang</option>
+              <option value="Serang">Serang</option>
+              <option value="Denpasar">Denpasar</option>
+              <option value="Medan">Medan</option>
+              <option value="Padang">Padang</option>
+              <option value="Pekanbaru">Pekanbaru</option>
+              <option value="Batam">Batam</option>
+              <option value="Palembang">Palembang</option>
+              <option value="Bandar Lampung">Bandar Lampung</option>
+              <option value="Pontianak">Pontianak</option>
+              <option value="Samarinda">Samarinda</option>
+              <option value="Balikpapan">Balikpapan</option>
+              <option value="Makassar">Makassar</option>
+              <option value="Manado">Manado</option>
+              <option value="Ambon">Ambon</option>
+              <option value="Jayapura">Jayapura</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Gambar Produk</label>
+          <div style="display:flex; gap:15px; align-items:center;">
+            <div class="img-preview-box" style="width:100px; height:100px; margin-top:0;">
+              <img id="p-img-preview" src="/uploads/default-product.jpg" alt="Preview">
+            </div>
+            <div style="flex:1;">
+              <input type="file" id="p-file-input" style="display:none;" onchange="previewProductImage()" accept="image/*">
+              <button type="button" class="btn-admin accent" style="width:100%; justify-content:center; padding:10px; margin-bottom:8px;" onclick="document.getElementById('p-file-input').click()">
+                Pilih Foto Produk
+              </button>
+              <span style="font-size:0.75rem; color:#64748b; display:block; text-align:center;">Maksimal file gambar 2MB.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-btn-row" style="margin-top:25px; justify-content:flex-end;">
+          <button type="button" class="btn-admin cancel" onclick="closeProductModal()">Batal</button>
+          <button type="submit" class="btn-admin primary" id="modal-submit-btn">Simpan Produk</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mitra JavaScript Controllers -->
+  <script src="/mitra-dashboard/js/mitra.js"></script>
+</body>
+</html>

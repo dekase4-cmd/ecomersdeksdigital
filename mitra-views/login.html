@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kemitraan Penjual - Deksdigital E-Commerce</title>
+  <!-- Mitra CSS -->
+  <link rel="stylesheet" href="/mitra-dashboard/css/mitra.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="login-page-body">
+
+  <div class="login-card">
+    
+    <!-- ==========================================
+         PANEL LOGIN MITRA
+         ========================================== -->
+    <div id="login-panel">
+      <div class="login-header">
+        <div class="login-logo">
+          <i data-lucide="store" style="width: 48px; height: 48px; margin: 0 auto 10px auto; color: var(--accent-color);"></i>
+          <div>Mitra<span>Dashboard</span></div>
+        </div>
+        <p class="login-subtitle">Silakan masuk menggunakan kredensial toko kemitraan Anda.</p>
+      </div>
+
+      <!-- Alert Box -->
+      <div class="alert-box-error" id="login-alert" style="display: none; background-color: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 12px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; text-align: center;">
+        Username atau password salah!
+      </div>
+
+      <form id="mitra-login-form" onsubmit="handleMitraLogin(event)">
+        <div class="form-group">
+          <label>Username Mitra</label>
+          <input type="text" id="login-username" class="form-control" placeholder="Username..." required style="border-radius:12px;">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="Password..." required style="border-radius:12px;">
+        </div>
+        <button type="submit" class="login-btn" id="login-submit-btn">
+          Masuk Dasbor Mitra
+        </button>
+      </form>
+      
+      <div style="text-align: center; margin-top: 20px; font-size: 0.9rem; color:#64748b;">
+        Belum punya akun mitra? <span class="auth-toggle-link" onclick="toggleAuthPanel('register')">Daftar Sekarang</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         PANEL DAFTAR MITRA (REGISTRASI)
+         ========================================== -->
+    <div id="register-panel" style="display: none;">
+      <div class="login-header">
+        <div class="login-logo">
+          <i data-lucide="user-plus" style="width: 48px; height: 48px; margin: 0 auto 10px auto; color: #22c55e;"></i>
+          <div>Daftar<span>Kemitraan</span></div>
+        </div>
+        <p class="login-subtitle">Bergabunglah dan mulai jual produk Anda di platform Deksdigital.</p>
+      </div>
+
+      <!-- Alert Box -->
+      <div class="alert-box-error" id="register-alert" style="display: none; background-color: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 12px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; text-align: center;">
+        Username sudah terdaftar!
+      </div>
+      <div class="alert-box-success" id="register-success" style="display: none; background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 12px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; text-align: center;">
+        Registrasi berhasil! Silakan masuk.
+      </div>
+
+      <form id="mitra-register-form" onsubmit="handleMitraRegister(event)">
+        <div class="form-group">
+          <label>Username Akun</label>
+          <input type="text" id="reg-username" class="form-control" placeholder="Gunakan huruf kecil/tanpa spasi..." required style="border-radius:10px;">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="Kata sandi akun..." required style="border-radius:10px;">
+        </div>
+        <div class="form-group">
+          <label>Nama Toko Mitra</label>
+          <input type="text" id="reg-shopname" class="form-control" placeholder="Nama toko yang tampil di storefront..." required style="border-radius:10px;">
+        </div>
+        <div class="form-group">
+          <label>Nomor WhatsApp Toko (Kode Negara, cth: 62898...)</label>
+          <input type="text" id="reg-whatsapp" class="form-control" placeholder="Untuk menerima pesanan..." required style="border-radius:10px;">
+        </div>
+        <div class="form-group">
+          <label>Biaya Layanan Admin untuk Pemilik Platform (%)</label>
+          <input type="number" id="reg-fee" class="form-control" value="5" min="5" max="50" step="0.5" required style="border-radius:10px;">
+          <span style="font-size:0.75rem; color:#64748b; display:block; margin-top:4px;">Persentase keuntungan untuk pemilik platform dari setiap produk yang terjual (minimal 5%).</span>
+        </div>
+        <button type="submit" class="login-btn" id="register-submit-btn" style="background-color: #22c55e;">
+          Daftar Kemitraan
+        </button>
+      </form>
+      
+      <div style="text-align: center; margin-top: 20px; font-size: 0.9rem; color:#64748b;">
+        Sudah memiliki akun? <span class="auth-toggle-link" onclick="toggleAuthPanel('login')">Masuk di sini</span>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 25px; font-size: 0.8rem; color: #94a3b8;">
+      Deksdigital Kemitraan &copy; 2026.
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Cek sesi aktif saat halaman dimuat
+    async function checkActiveSession() {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        if (data.loggedIn && data.user.role === 'mitra') {
+          window.location.href = '/mitra-dashboard/index.html';
+        }
+      } catch (e) {}
+    }
+    checkActiveSession();
+
+    // Ganti panel login / register
+    function toggleAuthPanel(mode) {
+      const loginPanel = document.getElementById('login-panel');
+      const registerPanel = document.getElementById('register-panel');
+      const loginAlert = document.getElementById('login-alert');
+      const regAlert = document.getElementById('register-alert');
+      const regSuccess = document.getElementById('register-success');
+
+      loginAlert.style.display = 'none';
+      regAlert.style.display = 'none';
+      regSuccess.style.display = 'none';
+
+      if (mode === 'login') {
+        loginPanel.style.display = 'block';
+        registerPanel.style.display = 'none';
+      } else {
+        loginPanel.style.display = 'none';
+        registerPanel.style.display = 'block';
+      }
+    }
+
+    // Handler Login Mitra
+    async function handleMitraLogin(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+      const alertBox = document.getElementById('login-alert');
+      const submitBtn = document.getElementById('login-submit-btn');
+
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Memverifikasi...';
+
+      try {
+        const res = await fetch('/api/mitra/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alertBox.textContent = data.error || 'Username atau password salah.';
+          alertBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Masuk Dasbor Mitra';
+          return;
+        }
+
+        window.location.href = '/mitra-dashboard/index.html';
+      } catch (e) {
+        alertBox.textContent = 'Kesalahan jaringan.';
+        alertBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Masuk Dasbor Mitra';
+      }
+    }
+
+    // Handler Registrasi Mitra
+    async function handleMitraRegister(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('reg-username').value.trim();
+      const password = document.getElementById('reg-password').value.trim();
+      const shopName = document.getElementById('reg-shopname').value.trim();
+      const whatsapp = document.getElementById('reg-whatsapp').value.trim();
+      const adminFeePercent = document.getElementById('reg-fee').value;
+
+      const errorAlert = document.getElementById('register-alert');
+      const successAlert = document.getElementById('register-success');
+      const submitBtn = document.getElementById('register-submit-btn');
+
+      errorAlert.style.display = 'none';
+      successAlert.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Mendaftarkan...';
+
+      try {
+        const res = await fetch('/api/mitra/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, shopName, whatsapp, adminFeePercent })
+        });
+        const data = await res.json();
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Daftar Kemitraan';
+
+        if (!res.ok) {
+          errorAlert.textContent = data.error || 'Gagal mendaftar.';
+          errorAlert.style.display = 'block';
+          return;
+        }
+
+        // Tampilkan sukses
+        successAlert.style.display = 'block';
+        document.getElementById('mitra-register-form').reset();
+        
+        // Alihkan otomatis ke login setelah 2 detik
+        setTimeout(() => {
+          toggleAuthPanel('login');
+        }, 2000);
+      } catch (e) {
+        errorAlert.textContent = 'Kesalahan jaringan.';
+        errorAlert.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Daftar Kemitraan';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Struk Pembelian - Deksdigital E-Commerce</title>
+  <!-- Main Store CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body style="background-color: #f1f5f9;">
+
+  <!-- Header Navigasi (Disembunyikan saat print) -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <i data-lucide="shopping-bag"></i> <span class="shop-name-text">Deksdigital Store</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">Beranda</a>
+        <a href="/kemitraan.html" class="nav-link">Kemitraan (Mitra)</a>
+        <a href="/" class="nav-link"><i data-lucide="home"></i></a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Container Utama -->
+  <main>
+    
+    <!-- Loader Struk -->
+    <div id="receipt-loader" style="text-align: center; padding: 60px 0; color: #64748b;">
+      <i data-lucide="loader-2" class="animate-spin" style="margin: 0 auto 10px auto; width: 40px; height: 40px;"></i>
+      <p>Sedang memuat data struk transaksi...</p>
+    </div>
+
+    <!-- Struk Digital Card -->
+    <div class="receipt-container" id="receipt-card" style="display: none;">
+      <!-- Header Struk -->
+      <div class="receipt-header">
+        <div class="receipt-shop-logo">
+          <i data-lucide="shopping-bag" style="width: 32px; height: 32px; display:inline-block; vertical-align:middle; color:var(--primary-color);"></i>
+          <span id="r-shop-name" class="shop-name-text">Deksdigital Store</span>
+        </div>
+        <p style="font-size: 0.9rem; color: #64748b; margin-top: 5px;">Terima kasih telah berbelanja di platform kami!</p>
+        <div class="receipt-meta" style="margin-top: 15px;">
+          <div>No. Invoice: <strong id="r-invoice-id">INV-000000000</strong></div>
+          <div>Tanggal: <span id="r-date">2026-06-20 14:00</span></div>
+          <div>Status: <span id="r-status" style="background-color: #fef3c7; color: #d97706; padding: 2px 8px; border-radius: 20px; font-weight: 600; font-size: 0.8rem;">Menunggu Pembayaran</span></div>
+        </div>
+      </div>
+      
+      <h2 class="receipt-title">Struk Pembelian</h2>
+      
+      <!-- Informasi Pembeli -->
+      <div style="font-size: 0.85rem; color: #475569; margin-bottom: 25px; line-height: 1.6;">
+        <h3 style="font-weight: 700; color: var(--secondary-color); font-size: 0.95rem; margin-bottom: 5px;">Detail Pelanggan:</h3>
+        <div>Nama: <strong id="r-customer-name">Nama Pemesan</strong></div>
+        <div>No. WhatsApp: <span id="r-customer-phone">08123456789</span></div>
+        <div>Alamat Pengiriman: <span id="r-customer-address">Alamat Pengiriman Lengkap</span></div>
+        <div id="r-custom-fields-container" style="margin-top:4px;"></div>
+      </div>
+
+      <!-- Detail Barang Belanja -->
+      <table class="receipt-details-table">
+        <thead>
+          <tr>
+            <th>Nama Item</th>
+            <th style="text-align: center;">Qty</th>
+            <th style="text-align: right;">Harga</th>
+            <th style="text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody id="r-items-body">
+          <!-- Item transaksi dimuat di sini -->
+        </tbody>
+        <tfoot>
+          <tr class="receipt-subtotal-row" id="r-subtotal-tr" style="display: none; font-size: 0.9rem; color: #64748b;">
+            <td colspan="3" style="padding: 8px 20px;">Subtotal</td>
+            <td id="r-subtotal" style="text-align: right; padding: 8px 20px;">Rp 0</td>
+          </tr>
+          <tr class="receipt-discount-row" id="r-discount-tr" style="display: none; font-size: 0.9rem; color: #ef4444;">
+            <td colspan="3" style="padding: 8px 20px;">Potongan Diskon (<span id="r-discount-code"></span>)</td>
+            <td id="r-discount" style="text-align: right; padding: 8px 20px;">-Rp 0</td>
+          </tr>
+          <tr class="receipt-total-row">
+            <td colspan="3">Total Pembayaran</td>
+            <td id="r-total" style="text-align: right;">Rp 0</td>
+          </tr>
+        </tfoot>
+      </table>
+      
+      <div style="font-size: 0.85rem; color: #64748b; line-height: 1.6; background-color: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div style="font-weight: 700; color: var(--secondary-color); margin-bottom: 4px;"><i data-lucide="info" style="width: 14px; height: 14px; display:inline-block; vertical-align:middle; margin-right:4px;"></i>Informasi Pembayaran &amp; Pengiriman:</div>
+        Pesanan Anda ditangani oleh <strong id="r-handler-name">Deksdigital Store</strong>. Silakan <strong>screenshot/unduh struk belanja ini</strong> dan kirimkan ke WhatsApp Admin melalui tombol di bawah untuk melakukan pembayaran dan memproses pesanan Anda.
+      </div>
+
+      <!-- Bukti Pembayaran Manual Preview -->
+      <div id="r-bukti-section" style="margin-top: 20px; display: none; font-size: 0.85rem; color: #64748b; line-height: 1.6; background-color: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div style="font-weight: 700; color: var(--secondary-color); margin-bottom: 8px;"><i data-lucide="image" style="width: 14px; height: 14px; display:inline-block; vertical-align:middle; margin-right:4px;"></i>Bukti Transfer Terunggah:</div>
+        <div style="text-align: center; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; max-height: 200px; display: inline-block;">
+          <img id="r-bukti-img" src="" alt="Bukti Transfer" style="max-height: 200px; max-width: 100%; object-fit: contain; cursor: pointer;" onclick="window.open(this.src, '_blank')">
+        </div>
+        <div style="margin-top: 6px; font-size: 0.75rem; color: #94a3b8;">Klik gambar untuk melihat ukuran penuh.</div>
+      </div>
+
+      <div class="receipt-footer-msg">
+        <p style="font-weight: 600; color: var(--secondary-color);">Deksdigital Store &copy; 2026</p>
+        <p>Simpan struk ini sebagai bukti transaksi sah Anda.</p>
+      </div>
+      
+      <!-- Aksi Cetak & WA (Disembunyikan saat print) -->
+      <div class="receipt-actions">
+        <button class="receipt-btn-print" onclick="window.print()">
+          <i data-lucide="printer"></i> Cetak Struk / PDF
+        </button>
+        <button class="receipt-btn-wa" id="r-wa-btn" onclick="sendInvoiceWA()">
+          <i data-lucide="phone"></i> Lanjutkan ke WhatsApp Admin
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Shared Store JavaScript -->
+  <script src="/js/app.js"></script>
+
+  <!-- Logika Cetak Struk -->
+  <script>
+    let activeOrder = null;
+
+    // Ambil Parameter orderId dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId');
+
+    async function loadReceiptPage() {
+      if (!orderId) {
+        document.getElementById('receipt-loader').innerHTML = `
+          <p style="color: #ef4444; font-weight: 700;">ID Invoice tidak ditemukan.</p>
+          <a href="/" style="color: var(--accent-color); font-weight: 600; text-decoration: underline;">Kembali ke Beranda</a>
+        `;
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/store/order/${orderId}`);
+        if (!res.ok) {
+          throw new Error('Pesanan tidak ditemukan.');
+        }
+        
+        const order = await res.json();
+        activeOrder = order;
+
+        // Render Struk ke DOM
+        document.getElementById('r-invoice-id').textContent = order.orderId;
+        
+        // Format Tanggal
+        const dateObj = new Date(order.createdAt);
+        const formattedDate = dateObj.toLocaleDateString('id-ID', {
+          year: 'numeric', month: 'long', day: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+        document.getElementById('r-date').textContent = formattedDate;
+
+        // Status Pesanan & Pembayaran Manual
+        const statusEl = document.getElementById('r-status');
+        
+        if (order.statusPembayaranManual === 'menunggu_verifikasi') {
+          statusEl.textContent = 'Menunggu Verifikasi';
+          statusEl.style.backgroundColor = '#dbeafe';
+          statusEl.style.color = '#1d4ed8';
+        } else if (order.statusPembayaranManual === 'terverifikasi' || order.status === 'Dibayar' || order.status === 'Paid') {
+          statusEl.textContent = 'Dibayar';
+          statusEl.style.backgroundColor = '#dcfce7';
+          statusEl.style.color = '#15803d';
+        } else if (order.statusPembayaranManual === 'ditolak') {
+          statusEl.textContent = 'Pembayaran Ditolak';
+          statusEl.style.backgroundColor = '#fee2e2';
+          statusEl.style.color = '#b91c1c';
+        } else {
+          statusEl.textContent = order.status;
+          if (order.status === 'Dibatalkan' || order.status === 'Cancelled') {
+            statusEl.style.backgroundColor = '#fee2e2';
+            statusEl.style.color = '#b91c1c';
+          } else if (order.status === 'Dikirim') {
+            statusEl.style.backgroundColor = '#dbeafe';
+            statusEl.style.color = '#1d4ed8';
+          } else {
+            statusEl.style.backgroundColor = '#fef3c7';
+            statusEl.style.color = '#d97706';
+          }
+        }
+
+        // Tampilkan gambar bukti jika ada
+        if (order.buktiTransferUrl) {
+          document.getElementById('r-bukti-img').src = order.buktiTransferUrl;
+          document.getElementById('r-bukti-section').style.display = 'block';
+        }
+
+        document.getElementById('r-customer-name').textContent = order.customer.name;
+        document.getElementById('r-customer-phone').textContent = order.customer.phone;
+        document.getElementById('r-customer-address').textContent = order.customer.address;
+        
+        // Render kolom kustom (Device Name, Merek, dll) jika ada
+        const customContainer = document.getElementById('r-custom-fields-container');
+        if (customContainer) {
+          customContainer.innerHTML = '';
+          if (order.customer && order.customer.customFields) {
+            const fields = order.customer.customFields;
+            Object.keys(fields).forEach(key => {
+              const div = document.createElement('div');
+              div.innerHTML = `${key}: <strong>${fields[key]}</strong>`;
+              customContainer.appendChild(div);
+            });
+          }
+        }
+
+        document.getElementById('r-total').textContent = formatRupiah(order.total);
+        document.getElementById('r-handler-name').textContent = order.targetName;
+
+        // Render subtotal & diskon jika ada diskon
+        const subtotalTr = document.getElementById('r-subtotal-tr');
+        const discountTr = document.getElementById('r-discount-tr');
+        if (order.discountAmount && order.discountAmount > 0) {
+          subtotalTr.style.display = 'table-row';
+          discountTr.style.display = 'table-row';
+          document.getElementById('r-subtotal').textContent = formatRupiah(order.subtotal || (order.total + order.discountAmount));
+          document.getElementById('r-discount-code').textContent = order.discountCode || 'KUPON';
+          document.getElementById('r-discount').textContent = `-${formatRupiah(order.discountAmount)}`;
+        } else {
+          subtotalTr.style.display = 'none';
+          discountTr.style.display = 'none';
+        }
+
+        // Render Daftar Item
+        const itemsBody = document.getElementById('r-items-body');
+        itemsBody.innerHTML = '';
+        
+        order.items.forEach(item => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.name}</td>
+            <td style="text-align: center;">${item.qty}</td>
+            <td style="text-align: right;">${formatRupiah(item.price)}</td>
+            <td style="text-align: right;">${formatRupiah(item.subtotal)}</td>
+          `;
+          itemsBody.appendChild(row);
+        });
+
+        // Tampilkan Card, sembunyikan loader
+        document.getElementById('receipt-loader').style.display = 'none';
+        document.getElementById('receipt-card').style.display = 'block';
+
+        lucide.createIcons();
+      } catch (err) {
+        document.getElementById('receipt-loader').innerHTML = `
+          <p style="color: #ef4444; font-weight: 700;">Gagal memuat struk pesanan.</p>
+          <a href="/" style="color: var(--accent-color); font-weight: 600; text-decoration: underline;">Kembali ke Beranda</a>
+        `;
+      }
+    }
+
+    // Mengirim bukti ke WhatsApp secara manual jika tombol ditekan kembali
+    function sendInvoiceWA() {
+      if (!activeOrder) return;
+
+      const order = activeOrder;
+      const orderId = order.orderId;
+      const targetWhatsapp = order.targetWhatsapp;
+      const totalText = formatRupiah(order.total);
+      const receiptLink = window.location.origin + `/receipt.html?orderId=${orderId}`;
+      
+      let itemsText = '';
+      order.items.forEach((item) => {
+        itemsText += `- ${item.name} (${item.qty}x) = ${formatRupiah(item.subtotal)}\n`;
+      });
+
+      // Tambahkan info diskon jika ada
+      if (order.discountAmount && order.discountAmount > 0) {
+        itemsText += `\nSubtotal: ${formatRupiah(order.subtotal)}\n`;
+        itemsText += `Potongan Diskon (${order.discountCode}): -${formatRupiah(order.discountAmount)}\n`;
+      }
+
+      // Ambil template dari settings jika ada, atau gunakan default
+      const defaultTemplate = `Halo Admin, saya ingin melakukan pemesanan untuk pesanan *{orderId}*.\n\n*Rincian Belanja*:\n{items}\n*Total Pembayaran*: {total}\n\n*Detail Penerima*:\nNama: {name}\nTelepon: {phone}\nAlamat: {address}\n\nLink Struk Digital: {receiptLink}\n\nMohon petunjuk pembayaran selanjutnya. Terima kasih!`;
+
+      // Jika kita bisa memuat settings, gunakan template dari settings
+      let template = defaultTemplate;
+      if (window.storeSettings && window.storeSettings.whatsappInvoiceTemplate) {
+        template = window.storeSettings.whatsappInvoiceTemplate;
+      }
+
+      let waMessage = template
+        .replace('{orderId}', orderId)
+        .replace('{items}', itemsText.trim())
+        .replace('{total}', totalText)
+        .replace('{name}', order.customer.name)
+        .replace('{phone}', order.customer.phone)
+        .replace('{address}', order.customer.address)
+        .replace('{receiptLink}', receiptLink);
+
+      const encodedMessage = encodeURIComponent(waMessage);
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetWhatsapp}&text=${encodedMessage}`;
+
+      window.open(whatsappUrl, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Inisialisasi pengaturan toko agar template WA bisa termuat dari backend
+      if (typeof loadSettings === 'function') {
+        loadSettings().then(() => {
+          loadReceiptPage();
+        });
+      } else {
+        loadReceiptPage();
+      }
+    });
+  </script>
+</body>
+</html>

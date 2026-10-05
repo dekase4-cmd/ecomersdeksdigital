@@ -1,0 +1,45 @@
+[
+  {
+    "id": "admin",
+    "username": "admin",
+    "password": "$2a$10$YL77Af0cIC2w838MRv2lWu/UCxdpNWYIrFnXXjfkHr2BAq0dz13hq",
+    "role": "admin",
+    "shopName": "Deksdigital Store"
+  },
+  {
+    "id": "mitra1",
+    "username": "mitra1",
+    "password": "$2a$10$bYuRxH7iKNPXwoOAwKDZheBT2noFKgrZ5yD.hI6n2rlb5X6f0uZlW",
+    "role": "mitra",
+    "shopName": "Toko Sepatu Mitra",
+    "whatsapp": "628987654321",
+    "adminFeePercent": 5
+  },
+  {
+    "id": "mitra_1781943915504",
+    "username": "mitrates1",
+    "password": "$2a$10$ZvIk4FHWqBnbctUOK8927O2/PihxBJZx1N7GB1d9ox9SS/fQ8rnrq",
+    "role": "mitra",
+    "shopName": "Toko Mitra Test",
+    "whatsapp": "081234567890",
+    "adminFeePercent": 5
+  },
+  {
+    "id": "mitra_1781945667441",
+    "username": "desakemiri",
+    "password": "$2a$10$BrDpsSWgTqqTKdgCRgCFMeOV6/qqt6e9Rpg5Iytn28Fr5tclVBjZG",
+    "role": "mitra",
+    "shopName": "kemiri jaya",
+    "whatsapp": "6284665574",
+    "adminFeePercent": 1
+  },
+  {
+    "id": "mitra_1791167150415",
+    "username": "desakemiri1",
+    "password": "$2a$10$WjDlDLX18gKWV7CXICzV0eTISaM06jIN8ptwgOdZPTQk0l7yAe/Fa",
+    "role": "mitra",
+    "shopName": "kemiri jaya1",
+    "whatsapp": "6284665574",
+    "adminFeePercent": 5
+  }
+]

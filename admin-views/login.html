@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Administrator - Deksdigital E-Commerce</title>
+  <!-- Admin Styling -->
+  <link rel="stylesheet" href="/admin-dashboard/css/admin.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="login-page-body">
+
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">
+        <i data-lucide="shield-check" style="width: 48px; height: 48px; margin: 0 auto 10px auto; color: var(--accent-color);"></i>
+        <div>Admin<span>Dashboard</span></div>
+      </div>
+      <p class="login-subtitle">Silakan masuk menggunakan kredensial Administrator Anda.</p>
+    </div>
+
+    <!-- Alert Box -->
+    <div id="login-alert" style="display: none; background-color: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 12px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; font-weight: 600; text-align: center;">
+      Username atau password salah!
+    </div>
+
+    <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: 600; font-size: 0.8rem; color: var(--primary-color); margin-bottom: 6px; text-transform: uppercase;">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="Masukkan username admin..." required style="border-radius: 12px; border-color:#cbd5e1;">
+      </div>
+      
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: 600; font-size: 0.8rem; color: var(--primary-color); margin-bottom: 6px; text-transform: uppercase;">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Masukkan password admin..." required style="border-radius: 12px; border-color:#cbd5e1;">
+      </div>
+
+      <button type="submit" class="login-btn" id="login-submit-btn">
+        <i data-lucide="log-in" style="width: 18px; height: 18px; display:inline-block; vertical-align:middle; margin-right:5px;"></i> Masuk
+      </button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 25px; font-size: 0.8rem; color: #94a3b8;">
+      Deksdigital Store &copy; 2026. Keamanan Terjamin.
+    </div>
+  </div>
+
+  <script>
+    // Inisialisasi ikon
+    lucide.createIcons();
+
+    // Verifikasi sesi saat halaman login dimuat
+    // Jika admin sudah memiliki sesi aktif, langsung alihkan ke index.html
+    async function checkActiveSession() {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        if (data.loggedIn && data.user.role === 'admin') {
+          window.location.href = '/admin-dashboard/index.html';
+        }
+      } catch (e) {
+        // Abaikan eror pengecekan sesi
+      }
+    }
+    checkActiveSession();
+
+    // Handler Kirim Form Login
+    async function handleAdminLogin(event) {
+      event.preventDefault();
+      
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const alertBox = document.getElementById('login-alert');
+      const submitBtn = document.getElementById('login-submit-btn');
+
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Memverifikasi...';
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+          alertBox.textContent = data.error || 'Terjadi kesalahan sistem login.';
+          alertBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i data-lucide="log-in" style="width: 18px; height: 18px; display:inline-block; vertical-align:middle; margin-right:5px;"></i> Masuk';
+          lucide.createIcons();
+          return;
+        }
+
+        // Sukses masuk, alihkan ke dashboard admin utama
+        window.location.href = '/admin-dashboard/index.html';
+      } catch (err) {
+        alertBox.textContent = 'Koneksi ke server terputus. Silakan coba lagi.';
+        alertBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i data-lucide="log-in" style="width: 18px; height: 18px; display:inline-block; vertical-align:middle; margin-right:5px;"></i> Masuk';
+        lucide.createIcons();
+      }
+    }
+  </script>
+</body>
+</html>
